@@ -70,13 +70,13 @@ informative:
 
     
 --- abstract
-The scale and scope of the worldwide web has been in part driven by the availability of HTML as a common serialization, data model, and interaction model for structured resources on the web. By contrast, the general use of appropriate hypermedia techniques for machine interfaces has been limited by the lack of a common markup format for serialization and exchange of structured machine resources and sensor/actuator data which includes or embeds standardized hypermedia controls. Machine optimized content formats exist for web links {{RFC5988}} {{RFC6690}} and for data items {{I-D.ietf-core-senml}}. Structured data which contains both links and items is known as the collection type. This draft describes media types for representation of machine resources in collections. A common data model is described with a representation format that uses a common set of reserved keywords to expose hypermedia controls, which inform clients how to perform state transfer operations on resources. The underlying assumptions regarding transfer layer processing are specified in this document. The HSML media type described in this document is compatible both SenML and with CoRE Link-format by reusing the keyword identifiers and element structures from these standards in the base representation of the collection.
+The scale and scope of the worldwide web has been in part driven by the availability of HTML as a common serialization, data model, and interaction model for structured resources on the web. By contrast, the general use of appropriate hypermedia techniques for machine interfaces has been limited by the lack of a common markup format for serialization and exchange of structured machine resources and sensor/actuator data which includes or embeds standardized hypermedia controls. Machine optimized content formats exist for web links {{RFC5988}} {{RFC6690}} and for data items {{I-D.ietf-core-senml}}. Structured data which contains both links and items is known as the collection type. This draft describes media types for representation of machine resources structured as collections. A common data model is described with a representation format that uses a common set of reserved keywords to expose hypermedia controls, which inform clients how to perform state transfer operations on resources. The underlying assumptions regarding transfer layer processing are specified in this document. The HSML media type described in this document is compatible both SenML and with CoRE Link-format by reusing the keyword identifiers and element structures from these documents in the base representation of the collection.
 
 --- middle
 
 # Scope of this document {#scope}
 
-As in the case of HTML, this is a broadly scoped document which specifies representation formats, data models, interaction models, transfer mapping, URI processing, and some extensions including forms and bindings.
+As with HTML, this is a broadly scoped document which specifies representation formats, data models, interaction models, transfer mapping, URI processing, and some extensions including forms and bindings.
 
 The features listed above and new features may be specified and extended as needed in other documents which refer to this document.
 
@@ -212,12 +212,11 @@ URI references may alternatively be routed as opaque strings to resources. In th
 URI Parameters, typically mapped as query parameters in HTTP and CoAP, are used for selecting resources, selecting partial representations, and otherwise modifying aspects of the expected or included representation. In this way, they may be considered part of the URI, since they help identify a unique representation to be transferred.
 
 
-
 ### Resource selection
 
 URI Parameters may be used to select resources in a collection for transfer. This is done using the common parameter matching rules specified in {{RFC6690}}.
 
-Resource selection is performed on Link Parameters. 
+Resource selection is performed based on matching URI Parameters with Link Parameters of all links in the collection which are exposed by the indicated media type and interface type. URI Parameters listed in {{uri-params}} are excluded from the matching process.
 
 # Transfer Model Mapping
 
@@ -288,6 +287,12 @@ Bindings are hypermedia controls used to construct transfer operations that expo
 
 # Reserved Identifiers {#reserved-identifiers}
 
+This section defines the common reserved identifiers that are expected to be processed by implementations of HSML clients and servers. There are many more relation types and link parameters defined and registered with IANA. Implementations should not restrict processing to the keywords identified in this document; they should accept all IANA registered keywords as valid identifiers.
+
+Many of the keywords listed are defined in other RFCs and IETF documents. This document does not redefine any existing keywords. Where a definition exists, the existing definition will be used. Where multiple conflicting definitions exist, this document will indicate the required definition.
+
+New definitions are summarized in {{iana-cons}}.
+
 ## Default CURIE
 
 Identifiers in representations using the HSML media types are assumed to use the default CURIE "hsml". An identifier that is not matched to an existing namespace is assumed to carry the prefix "hsml".
@@ -296,7 +301,7 @@ For example, if the identifier "method" is encountered and it doesn't resolve to
 
 This document defines an ad-hoc registry of identifiers defined in the HSML namespace in {{}}.
 
-## URI Parameters
+## URI Parameters {#uri=params}
 
 The following URI Parameters are used to filter representations according to specific processing rules and should not be used to attempt to match link parameters.
 
@@ -307,7 +312,7 @@ The following URI Parameters are used to filter representations according to spe
 :    Indicates the number of items to be returned from the collection
 
 "start"
-:    Indicates the array index of the item in the collection to select as the first item to be selected to be returned
+:    Indicates the array index of the item in the collection to select as the first item to be returned
 
 "page"
 :    Page number, in units of count
@@ -315,21 +320,18 @@ The following URI Parameters are used to filter representations according to spe
 ## Link Keywords {#link-keywords}
 The following keywords are reserved for use in an HSML serialization to indicate elements of a web link
 
-"href"
-:    target of a link reference. This may be a relative reference in the collection e.g. "currentValue" or a local absolute reference "/sensors/temp/currentValue" or a full reference "https://example.com/sensors/temp/currentValue"
-
 "anchor"
 :    overrides the default resource context of the link
 
 "rel"
-:    link relation type
+:    link relation type as defined in {{RFC5988}} and {{RFC6690}}
+
+"href"
+:    target of a link reference. This may be a relative reference in the collection e.g. "currentValue" or a local absolute reference "/sensors/temp/currentValue" or a full reference "https://example.com/sensors/temp/currentValue"
 {: vspace='0'}
 
 ### Link Relation Types
-The following keywords are reserved for use in a hsml serialization to indicate types of link relations, and are used for values of "rel".
-
-"boundto"
-:    points to a resource that receives from or transmits state updates to the resource indicated by the link context
+The following keywords are reserved for use in a hsml serialization to indicate types of link relations, and are used for values of "rel". 
 
 "self"
 :    refers to the collection that contains the link
@@ -356,8 +358,11 @@ The following keywords are reserved for use in a hsml serialization to indicate 
 "ct"
 :    the CoAP content-format number(s) associated with the item
 
-"mt"
+"content-type"
 :    the media type string(s) associated with the item
+
+"obs"
+:    presence of this attribute indicates that the associated resource is observable
 
 {: vspace='0'}
 
@@ -392,10 +397,16 @@ The following keywords are reserved for use in a hsml serialization to indicate 
 :    string value
 {: vspace='0'}
 
-## Link Parameters in Forms
+## Link Parameters used in Forms
+
+"anchor"
+:    May override the default context of a form and store it in a different location from the subject resource
 
 "rel"
 :    Indicates the action being exposed by the form
+
+"action"
+:    URI for mapping an action specified in a form, similar to "href" in links
 
 "type"
 :    Additional indicator of the action being exposed, can be used with "rel"
@@ -403,17 +414,41 @@ The following keywords are reserved for use in a hsml serialization to indicate 
 "method"
 :    Transfer method to use on a particular action
 
-"action"
-:    URI for mapping an action specified in a form, similar to "href" in links
+"accepts"
+:    The Content-Types that are accepted on create and update methods
+
+"content-type"
+:    The Content-Types that are exposed by retrieve and observe methods
+
+"ct"
+:    the CoAP content-format number(s) exposed or accepted
 
 "schema"
-:    Indicates the schema to use for constructing and interpreting transfer payloads, may be a literal value or a URI pointing to an instance of a schema
+:    Indicates the schema to use for constructing or interpreting transfer payloads, may be a literal value or a URI pointing to an instance of a schema
 {: vspace='0'}
 
 ## Link Parameters used in Bindings
 
+"id"
+:    The relative URI of this binding in its containing collection
+
+"anchor"
+:    May override the context URI of a binding with any observable resource
+
+"rel"
+:    Link relation indicates that this is a binding using the value "boundto"
+
+"target"
+:    The URI to bind to the context URI, where transfer operations will be sent, similar to "href" in links
+
 "method"
 :    Transfer method to use for notifications
+
+"content-type"
+:    The Content-Type to use in the transfer operation
+
+"ct"
+:    the CoAP content-format number to use in the transfer operation
 
 "schema"
 :    Schema to use in constructing the notification transfer payload
@@ -447,24 +482,28 @@ The following keywords are reserved for use in a hsml serialization to indicate 
 {: vspace='0'}
 
 
-# IANA Considerations
+# IANA Considerations {#iana-cons}
 
 ## New Media Types for IANA Media Type registry
+
+type
+- hsml
+subtypes 
+- collection
+- link
+- item
 
 application/hsml 
 application/hsml.collection
 application/hsml.link
 application/hsml.item
 
-type hsml
-subtypes collection, link, item
-
 application/hsml+json
 application/hsml.collection+json
 application/hsml.link+json
 application/hsml.item+json
 
-## New Content Formats for IANA CoRE Parameters Registry
+## New Content Formats for the IANA CoRE Parameters Registry
 
 (subject to Structured Syntax encoding rules TBD)
 22000 - application/hsml+json 
@@ -473,9 +512,10 @@ application/hsml.item+json
 
 ## New Link Parameters
 
-baseuri
 method
 schema
+content-type
+ct
 
 (the following should be registered in the CoRE Interfaces spin-off draft on asynchronous notification)
 
@@ -499,7 +539,7 @@ grp
 
 boundto
 
-## New Interface types (if=)
+## New Interface types (if=) for the IANA CoRE Parameters Registry
 
 hsml.collection
 hsml.item
@@ -521,6 +561,12 @@ Representations submitted to a server to update the state of a resource (UPDATE,
 
 ## Object Signing and Encryption
 Object signing and encryption SHOULD use the mechanisms specified in IETF documents for secure JSON Objects {{}} and CBOR Objects {{}}.
+
+# Design Patterns
+
+## RESTful Actuation using collections
+
+## RESTful Events and Alerts using collections
 
 --- back
 
