@@ -4,8 +4,8 @@
 
 Thing-to-Thing Research Group                                  M. Koster
 Internet-Draft                                               SmartThings
-Intended status: Experimental                              June 24, 2016
-Expires: December 26, 2016
+Intended status: Experimental                              July 10, 2016
+Expires: January 11, 2017
 
 
                 Media Types for Hypertext Sensor Markup
@@ -49,13 +49,13 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on December 26, 2016.
+   This Internet-Draft will expire on January 11, 2017.
 
 
 
-Koster                  Expires December 26, 2016               [Page 1]
+Koster                  Expires January 11, 2017                [Page 1]
 
-Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
+Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
 
 
 Copyright Notice
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Koster                  Expires December 26, 2016               [Page 2]
+Koster                  Expires January 11, 2017                [Page 2]
 
-Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
+Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
 
 
        8.3.1.  Link Embedding Items  . . . . . . . . . . . . . . . .   9
@@ -131,6 +131,7 @@ Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
      10.4.  Item Keywords  . . . . . . . . . . . . . . . . . . . . .  13
      10.5.  Link Parameters used in Forms  . . . . . . . . . . . . .  13
      10.6.  Link Parameters used in Monitors . . . . . . . . . . . .  14
+     10.7.  Conditional Observe Parameters used in Monitor links . .  15
    11. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  16
      11.1.  New Media Types for IANA Media Type registry . . . . . .  16
      11.2.  New Content Formats for the IANA CoRE Parameters
@@ -164,10 +165,9 @@ Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
 
 
 
-
-Koster                  Expires December 26, 2016               [Page 3]
+Koster                  Expires January 11, 2017                [Page 3]
 
-Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
+Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
 
 
 2.  Overview and Use Case Requirements
@@ -221,9 +221,9 @@ Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
 
 
 
-Koster                  Expires December 26, 2016               [Page 4]
+Koster                  Expires January 11, 2017                [Page 4]
 
-Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
+Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
 
 
 3.3.  Collections
@@ -277,9 +277,9 @@ Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
 
 
 
-Koster                  Expires December 26, 2016               [Page 5]
+Koster                  Expires January 11, 2017                [Page 5]
 
-Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
+Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
 
 
       PUBLISH in pubsub in the frequent case that CREATE and UPDATE are
@@ -333,9 +333,9 @@ Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
 
 
 
-Koster                  Expires December 26, 2016               [Page 6]
+Koster                  Expires January 11, 2017                [Page 6]
 
-Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
+Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
 
 
 5.3.  Item element
@@ -389,9 +389,9 @@ Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
 
 
 
-Koster                  Expires December 26, 2016               [Page 7]
+Koster                  Expires January 11, 2017                [Page 7]
 
-Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
+Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
 
 
    accept references to items in collections with the trailing "/" if
@@ -445,9 +445,9 @@ Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
 
 
 
-Koster                  Expires December 26, 2016               [Page 8]
+Koster                  Expires January 11, 2017                [Page 8]
 
-Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
+Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
 
 
 8.1.3.  UPDATE
@@ -501,9 +501,9 @@ Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
 
 
 
-Koster                  Expires December 26, 2016               [Page 9]
+Koster                  Expires January 11, 2017                [Page 9]
 
-Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
+Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
 
 
 8.4.  Groups
@@ -557,9 +557,9 @@ Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
 
 
 
-Koster                  Expires December 26, 2016              [Page 10]
+Koster                  Expires January 11, 2017               [Page 10]
 
-Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
+Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
 
 
    Where a definition exists, the existing definition will be used.
@@ -577,6 +577,9 @@ Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
    For example, if the identifier "method" is encountered and it doesn't
    resolve to an IANA registered parameter (reg-parameter in [RFC5988])
    resolution should be attempted using "hsml:method".
+
+   The default CURIE "hsml" identifies a namespace defined by the
+   identifiers in Section 10 of this document.
 
 10.2.  URI Parameters
 
@@ -607,17 +610,16 @@ Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
       link relation type as defined in [RFC5988] and [RFC6690]
 
    "href"
+
+
+
+Koster                  Expires January 11, 2017               [Page 11]
+
+Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
+
+
       target of a link reference.  This may be a relative reference in
       the collection e.g. "currentValue" or a local absolute reference
-
-
-
-
-Koster                  Expires December 26, 2016              [Page 11]
-
-Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
-
-
       "/sensors/temp/currentValue" or a full reference
       "https://example.com/sensors/temp/currentValue"
 
@@ -667,11 +669,9 @@ Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
 
 
 
-
-
-Koster                  Expires December 26, 2016              [Page 12]
+Koster                  Expires January 11, 2017               [Page 12]
 
-Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
+Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
 
 
 10.4.  Item Keywords
@@ -705,8 +705,8 @@ Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
    "vb"
       boolean value
 
-   "vd"
-      data value, an extension to the senml value types to enable
+   "vo"
+      object value, an extension to the senml value types to enable
       embedded data objects
 
    "vs"
@@ -719,19 +719,19 @@ Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
       different location from the subject resource
 
    "rel"
-      Indicates the action being exposed by the form
-
-   "action"
-
+      Indicates that this control is a form; MUST contain the value
+      "action"
 
 
-Koster                  Expires December 26, 2016              [Page 13]
+
+
+Koster                  Expires January 11, 2017               [Page 13]
 
-Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
+Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
 
 
-      URI for mapping an action specified in a form, similar to "href"
-      in links
+   "href"
+      URI for mapping the action specified in the form
 
    "type"
       Additional indicator of the action being exposed, can be used with
@@ -762,11 +762,11 @@ Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
       resource
 
    "rel"
-      Link relation indicates that this is a monitor using the value
+      Indicates that this control is a monitor; MUST contain the value
       "monitor"
 
    "href"
-      The URI of the resource used to bmonitor context URI, where
+      The URI of the resource used to monitor context URI, where
       transfer operations will be sent.
 
    "accept"
@@ -781,9 +781,9 @@ Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
 
 
 
-Koster                  Expires December 26, 2016              [Page 14]
+Koster                  Expires January 11, 2017               [Page 14]
 
-Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
+Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
 
 
    "accept-method"
@@ -801,6 +801,8 @@ Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
       Schema to use in constructing the notification transfer payload,
       default is to transfer the accepted payload unmodified to the
       target resource.
+
+10.7.  Conditional Observe Parameters used in Monitor links
 
    "pmin"
       Minimum time between notification from a binding
@@ -835,11 +837,9 @@ Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
 
 
 
-
-
-Koster                  Expires December 26, 2016              [Page 15]
+Koster                  Expires January 11, 2017               [Page 15]
 
-Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
+Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
 
 
 11.  IANA Considerations
@@ -893,9 +893,9 @@ Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
 
 
 
-Koster                  Expires December 26, 2016              [Page 16]
+Koster                  Expires January 11, 2017               [Page 16]
 
-Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
+Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
 
 
 11.3.  New Link Parameters
@@ -949,9 +949,9 @@ Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
 
 
 
-Koster                  Expires December 26, 2016              [Page 17]
+Koster                  Expires January 11, 2017               [Page 17]
 
-Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
+Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
 
 
 12.  Security Considerations
@@ -1005,9 +1005,9 @@ Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
 
 
 
-Koster                  Expires December 26, 2016              [Page 18]
+Koster                  Expires January 11, 2017               [Page 18]
 
-Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
+Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
 
 
    [I-D.ietf-core-interfaces]
@@ -1061,9 +1061,9 @@ Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
 
 
 
-Koster                  Expires December 26, 2016              [Page 19]
+Koster                  Expires January 11, 2017               [Page 19]
 
-Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
+Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
 
 
    [RFC6690]  Shelby, Z., "Constrained RESTful Environments (CoRE) Link
@@ -1117,4 +1117,4 @@ Author's Address
 
 
 
-Koster                  Expires December 26, 2016              [Page 20]
+Koster                  Expires January 11, 2017               [Page 20]
