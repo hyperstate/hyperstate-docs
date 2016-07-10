@@ -35,9 +35,12 @@ informative:
   RFC3986:
   RFC5988:
   RFC7252:
+  RFC7516:
+  RFC1866:
   I-D.ietf-core-interfaces:
   I-D.ietf-core-resource-directory:
   I-D.ietf-core-senml:
+  I-D.ietf-cose-msg:
 
   REST:
     target: http://www.ics.uci.edu/~fielding/pubs/dissertation/fielding_dissertation.pdf
@@ -76,7 +79,7 @@ The scale and scope of the worldwide web has been in part driven by the availabi
 
 # Scope of this document {#scope}
 
-As with HTML, this is a broadly scoped document which specifies representation formats, data models, interaction models, transfer mapping, URI processing, and some extensions including forms and bindings.
+This is a broadly scoped document which specifies representation formats, data models, interaction models, transfer mapping, URI processing, and some extensions including forms and bindings.
 
 The features listed above and new features may be specified and extended as needed in other documents which refer to this document.
 
@@ -139,7 +142,7 @@ CREATE
 :    Create an instance of a resource as specified using the payload as a constructor. Optionally return a reference to the created resource. Typically uses POST in CoAP or HTTP, may use PUBLISH in pubsub protocols.
 
 RETRIEVE
-:    Obtain a representation of the selected resource. Typically uses GET in CoAP or HTTP, could use SUBSCRIBE with data retention in pubsub.
+:    Obtain a representation of the selected resource. Typically uses GET in CoAP or HTTP, could use SUBSCRIBE with message retention in pubsub.
 
 UPDATE
 :    Replace or partially replace the representation of the selected resource. Typically uses PUT or PATCH in CoAP and HTTP, could use PUBLISH in pubsub in the frequent case that CREATE and UPDATE are not needed on the same resource.
@@ -152,7 +155,7 @@ OBSERVE
 {: vspace='0'}
 
 
-# Collections {#collections}
+# Collections {#collection-description}
 
 ## Base element
 A base element describe the context under which to interpret values in items within the representation of a colection.
@@ -193,7 +196,7 @@ Example Serialization Formats {#example-formats}
 
 # URI and Parameter Processing
 
-The hsml media type defines URI reference processing and URI Query processing but does not in general define fragment (#) references in URIs. 
+The HSML media type defines URI reference processing and URI Query processing but does not in general define fragment (#) references in URIs. 
 
 If fragment references are provided in a particular transfer implementation, they should be used to select single items in collections in accordance with current practice.
 
@@ -271,7 +274,7 @@ Transfer operations which specify the collection URI as target are sent to the r
 
 URI Parameters may be used to select a particular subset of target resources within the group in the collection.
 
-Responses from the selected group resources are aggregated and by default returned as a single response using the response aggregation method specified in {{}}. 
+Responses from the selected group resources are aggregated and by default returned as a single response. The group response SHOULD be returned as an outer array where such representation is available, for example a JSON array which contains elements consisting of SenML responses.
 
 Optionally, a chunked response may be specified, if allowed by the transfer implementation, in which the response from each group member is returned individually as a sequence of responses.
 
@@ -279,7 +282,7 @@ Optionally, a chunked response may be specified, if allowed by the transfer impl
 
 ## Forms
 
-Forms are hypermedia controls used to construct transfer operations that change the state of resources. The vocabulary and semantics roughly follows the use of forms in HTML {{}}.
+Forms are hypermedia controls used to construct transfer operations that change the state of resources. The vocabulary and semantics roughly follows the use of forms in HTML {{RFC1866}}.
 
 ## Bindings
 
@@ -299,9 +302,7 @@ Identifiers in representations using the HSML media types are assumed to use the
 
 For example, if the identifier "method" is encountered and it doesn't resolve to an IANA registered parameter (reg-parameter in {{RFC5988}}) resolution should be attempted using "hsml:method".
 
-This document defines an ad-hoc registry of identifiers defined in the HSML namespace in {{}}.
-
-## URI Parameters {#uri=params}
+## URI Parameters {#uri-params}
 
 The following URI Parameters are used to filter representations according to specific processing rules and should not be used to attempt to match link parameters.
 
@@ -331,7 +332,7 @@ The following keywords are reserved for use in an HSML serialization to indicate
 {: vspace='0'}
 
 ### Link Relation Types
-The following keywords are reserved for use in a hsml serialization to indicate types of link relations, and are used for values of "rel". 
+The following keywords are reserved for use in a HSML serialization to indicate types of link relations, and are used for values of "rel". 
 
 "self"
 :    refers to the collection that contains the link
@@ -347,7 +348,7 @@ The following keywords are reserved for use in a hsml serialization to indicate 
 {: vspace='0'}
 
 ### Link Attribute Types 
-The following keywords are reserved for use in a hsml serialization to indicate types of link attributes
+The following keywords are reserved for use in a HSML serialization to indicate types of link attributes
 
 "rt"
 :    the resource type(s) of the item
@@ -363,11 +364,10 @@ The following keywords are reserved for use in a hsml serialization to indicate 
 
 "obs"
 :    presence of this attribute indicates that the associated resource is observable
-
 {: vspace='0'}
 
 ## Item Keywords {#item-keywords}
-The following keywords are reserved for use in a hsml serialization to indicate elements within the serialization
+The following keywords are reserved for use in a HSML serialization to indicate elements within the serialization. These are defined in {{I-D.ietf-core-senml}}.
 
 "bn"
 :    the base name or base URI of the collection, relative to the service location e.g. "/sensors/temp/"
@@ -390,8 +390,8 @@ The following keywords are reserved for use in a hsml serialization to indicate 
 "vb"
 :    boolean value
 
-"vo"
-:    object value, an extension to the senml value types to enable embedded objects
+"vd"
+:    data value, an extension to the senml value types to enable embedded data objects
 
 "vs"
 :    string value
@@ -560,7 +560,7 @@ The collection representation may include embedded access control information, a
 Representations submitted to a server to update the state of a resource (UPDATE, CREATE, DELETE) may also contain embedded signed assertions which may be used by the server to decide whether to apply or reject the update.
 
 ## Object Signing and Encryption
-Object signing and encryption SHOULD use the mechanisms specified in IETF documents for secure JSON Objects {{}} and CBOR Objects {{}}.
+Object signing and encryption SHOULD use the mechanisms specified in IETF documents for secure JSON Objects {{RFC7516}} and CBOR Objects {{I-D.ietf-cose-msg}}.
 
 # Design Patterns
 

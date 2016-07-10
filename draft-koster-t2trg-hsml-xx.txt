@@ -1,0 +1,1008 @@
+
+
+
+
+Thing-to-Thing Research Group                                  M. Koster
+Internet-Draft                                               SmartThings
+Intended status: Experimental                              June 24, 2016
+Expires: December 26, 2016
+
+
+                Media Types for Hypertext Sensor Markup
+                       draft-koster-t2trg-hsml-00
+
+Abstract
+
+   The scale and scope of the worldwide web has been in part driven by
+   the availability of HTML as a common serialization, data model, and
+   interaction model for structured resources on the web.  By contrast,
+   the general use of appropriate hypermedia techniques for machine
+   interfaces has been limited by the lack of a common markup format for
+   serialization and exchange of structured machine resources and
+   sensor/actuator data which includes or embeds standardized hypermedia
+   controls.  Machine optimized content formats exist for web links
+   [RFC5988] [RFC6690] and for data items [I-D.ietf-core-senml].
+   Structured data which contains both links and items is known as the
+   collection type.  This draft describes media types for representation
+   of machine resources structured as collections.  A common data model
+   is described with a representation format that uses a common set of
+   reserved keywords to expose hypermedia controls, which inform clients
+   how to perform state transfer operations on resources.  The
+   underlying assumptions regarding transfer layer processing are
+   specified in this document.  The HSML media type described in this
+   document is compatible both SenML and with CoRE Link-format by
+   reusing the keyword identifiers and element structures from these
+   documents in the base representation of the collection.
+
+Status of This Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at http://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on December 26, 2016.
+
+
+
+Koster                  Expires December 26, 2016               [Page 1]
+
+Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
+
+
+Copyright Notice
+
+   Copyright (c) 2016 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents
+   (http://trustee.ietf.org/license-info) in effect on the date of
+   publication of this document.  Please review these documents
+   carefully, as they describe your rights and restrictions with respect
+   to this document.  Code Components extracted from this document must
+   include Simplified BSD License text as described in Section 4.e of
+   the Trust Legal Provisions and are provided without warranty as
+   described in the Simplified BSD License.
+
+Table of Contents
+
+   1.  Scope of this document  . . . . . . . . . . . . . . . . . . .   3
+   2.  Overview and Use Case Requirements  . . . . . . . . . . . . .   4
+   3.  Data Model and Interaction Model  . . . . . . . . . . . . . .   4
+     3.1.  Normative Representation  . . . . . . . . . . . . . . . .   4
+     3.2.  Links . . . . . . . . . . . . . . . . . . . . . . . . . .   4
+     3.3.  Collections . . . . . . . . . . . . . . . . . . . . . . .   5
+     3.4.  Link Embedding  . . . . . . . . . . . . . . . . . . . . .   5
+       3.4.1.  Batch operations on multiple items in a collection  .   5
+       3.4.2.  Collective operation on groups of linked resources  .   5
+   4.  Abstract Transfer Model . . . . . . . . . . . . . . . . . . .   5
+   5.  Collections . . . . . . . . . . . . . . . . . . . . . . . . .   6
+     5.1.  Base element  . . . . . . . . . . . . . . . . . . . . . .   6
+     5.2.  Link element  . . . . . . . . . . . . . . . . . . . . . .   6
+     5.3.  Item element  . . . . . . . . . . . . . . . . . . . . . .   7
+   6.  Representation Formats  . . . . . . . . . . . . . . . . . . .   7
+   7.  URI and Parameter Processing  . . . . . . . . . . . . . . . .   7
+     7.1.  URI Path Processing . . . . . . . . . . . . . . . . . . .   7
+     7.2.  URI Parameter processing  . . . . . . . . . . . . . . . .   8
+       7.2.1.  Resource selection  . . . . . . . . . . . . . . . . .   8
+   8.  Transfer Model Mapping  . . . . . . . . . . . . . . . . . . .   8
+     8.1.  Collection  . . . . . . . . . . . . . . . . . . . . . . .   8
+       8.1.1.  RETRIEVE  . . . . . . . . . . . . . . . . . . . . . .   8
+       8.1.2.  CREATE  . . . . . . . . . . . . . . . . . . . . . . .   8
+       8.1.3.  UPDATE  . . . . . . . . . . . . . . . . . . . . . . .   9
+       8.1.4.  DELETE  . . . . . . . . . . . . . . . . . . . . . . .   9
+     8.2.  Links . . . . . . . . . . . . . . . . . . . . . . . . . .   9
+       8.2.1.  RETRIEVE  . . . . . . . . . . . . . . . . . . . . . .   9
+       8.2.2.  CREATE  . . . . . . . . . . . . . . . . . . . . . . .   9
+       8.2.3.  UPDATE (including partial update) . . . . . . . . . .   9
+       8.2.4.  DELETE  . . . . . . . . . . . . . . . . . . . . . . .   9
+     8.3.  Items . . . . . . . . . . . . . . . . . . . . . . . . . .   9
+
+
+
+Koster                  Expires December 26, 2016               [Page 2]
+
+Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
+
+
+       8.3.1.  Link Embedding Items  . . . . . . . . . . . . . . . .   9
+       8.3.2.  RETRIEVE  . . . . . . . . . . . . . . . . . . . . . .   9
+       8.3.3.  UPDATE  . . . . . . . . . . . . . . . . . . . . . . .   9
+       8.3.4.  DELETE  . . . . . . . . . . . . . . . . . . . . . . .   9
+     8.4.  Groups  . . . . . . . . . . . . . . . . . . . . . . . . .  10
+   9.  Link extensions . . . . . . . . . . . . . . . . . . . . . . .  10
+     9.1.  Forms . . . . . . . . . . . . . . . . . . . . . . . . . .  10
+     9.2.  Bindings  . . . . . . . . . . . . . . . . . . . . . . . .  10
+   10. Reserved Identifiers  . . . . . . . . . . . . . . . . . . . .  10
+     10.1.  Default CURIE  . . . . . . . . . . . . . . . . . . . . .  11
+     10.2.  URI Parameters . . . . . . . . . . . . . . . . . . . . .  11
+     10.3.  Link Keywords  . . . . . . . . . . . . . . . . . . . . .  11
+       10.3.1.  Link Relation Types  . . . . . . . . . . . . . . . .  12
+       10.3.2.  Link Attribute Types . . . . . . . . . . . . . . . .  12
+     10.4.  Item Keywords  . . . . . . . . . . . . . . . . . . . . .  12
+     10.5.  Link Parameters used in Forms  . . . . . . . . . . . . .  13
+     10.6.  Link Parameters used in Bindings . . . . . . . . . . . .  14
+   11. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  15
+     11.1.  New Media Types for IANA Media Type registry . . . . . .  15
+     11.2.  New Content Formats for the IANA CoRE Parameters
+            Registry . . . . . . . . . . . . . . . . . . . . . . . .  15
+     11.3.  New Link Parameters  . . . . . . . . . . . . . . . . . .  16
+     11.4.  New Link Relation Types (rel=) . . . . . . . . . . . . .  16
+     11.5.  New Interface types (if=) for the IANA CoRE Parameters
+            Registry . . . . . . . . . . . . . . . . . . . . . . . .  16
+   12. Security Considerations . . . . . . . . . . . . . . . . . . .  16
+     12.1.  Object Signing . . . . . . . . . . . . . . . . . . . . .  16
+     12.2.  Signed Embedded Time Stamps  . . . . . . . . . . . . . .  16
+     12.3.  Signed Embedded Access Control . . . . . . . . . . . . .  16
+     12.4.  Secure State Updates . . . . . . . . . . . . . . . . . .  16
+     12.5.  Object Signing and Encryption  . . . . . . . . . . . . .  17
+   13. Design Patterns . . . . . . . . . . . . . . . . . . . . . . .  17
+     13.1.  RESTful Actuation using collections  . . . . . . . . . .  17
+     13.2.  RESTful Events and Alerts using collections  . . . . . .  17
+   14. Informative References  . . . . . . . . . . . . . . . . . . .  17
+   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  18
+
+1.  Scope of this document
+
+   This is a broadly scoped document which specifies representation
+   formats, data models, interaction models, transfer mapping, URI
+   processing, and some extensions including forms and bindings.
+
+   The features listed above and new features may be specified and
+   extended as needed in other documents which refer to this document.
+
+
+
+
+
+
+Koster                  Expires December 26, 2016               [Page 3]
+
+Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
+
+
+2.  Overview and Use Case Requirements
+
+   Use case requirements include the following.
+
+   A standardized way to expose self-describing resource representations
+   using embedded links and link annotations.
+
+   A standardized way of organizing and interacting with resource
+   instances using hyperlinks.
+
+   A standardized encapsulation of resources for modeling things,
+   capabilities, groups, indices, and other common structures.
+
+3.  Data Model and Interaction Model
+
+   The HSML data model consists of collections containing links and
+   items.  An instance of a collection is identified by a URI.
+
+   Items are data elements, either within the context the collection, or
+   outide the context of the collection.  An instance of an item is
+   identified by a URI.
+
+   Links are standard web links as in [RFC5988] or [RFC6690].
+
+   Items are identified by links in a collection.  An Item may only be
+   in the context of one collection, but may be identified by any number
+   of links in any number of collections.
+
+   Links in a collection may point to items within the context of the
+   collection or they may point to items external to the collection, on
+   the same server or on other servers.
+
+   Items in the collection that use the SenML data model may be embedded
+   in the collection and transferred either along with the links or
+   separately from links.
+
+3.1.  Normative Representation
+
+   JSON formatted examples are used in this document to illustrate
+   normative and informative concepts.  Representations in other formats
+   may be derived from the JSON representations.
+
+3.2.  Links
+
+   Links follow the specifications in [RFC5988] and [RFC6690] with
+   extensions to implement forms and bindings as described in this
+   document and any referencing extension documents.
+
+
+
+
+Koster                  Expires December 26, 2016               [Page 4]
+
+Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
+
+
+3.3.  Collections
+
+   Collections contain one or more links and extended links, and may
+   contain data items referred to by the links.  A representation of a
+   collection may contain both links and data items.
+
+3.4.  Link Embedding
+
+   Link embedding emnables the transfer of more than one item in a
+   collection using a single transfer operation.
+
+3.4.1.  Batch operations on multiple items in a collection
+
+   A collection of items enables operations on more than one item at a
+   time by exposing a structured a representation of multiple resources
+   in the collection.
+
+   Applications may select resources by using URI parameters, and
+   transfer representations of multiple resources using the SenML multi-
+   item format.
+
+3.4.2.  Collective operation on groups of linked resources
+
+   Resource links in the collection may specify group transfer
+   semantics, where transfer operations are replicated the resources
+   indicated by the links optionally selected using URI parameters.
+   Group responses are aggregated using the SenML multi-item format.
+
+4.  Abstract Transfer Model
+
+   The HSML media type assumes a transfer model capable of interacting
+   with representations using a simple CRUD model, allowing for basic
+   life cycle operations on resources and collections.
+
+   CREATE
+      Create an instance of a resource as specified using the payload as
+      a constructor.  Optionally return a reference to the created
+      resource.  Typically uses POST in CoAP or HTTP, may use PUBLISH in
+      pubsub protocols.
+
+   RETRIEVE
+      Obtain a representation of the selected resource.  Typically uses
+      GET in CoAP or HTTP, could use SUBSCRIBE with message retention in
+      pubsub.
+
+   UPDATE
+      Replace or partially replace the representation of the selected
+      resource.  Typically uses PUT or PATCH in CoAP and HTTP, could use
+
+
+
+Koster                  Expires December 26, 2016               [Page 5]
+
+Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
+
+
+      PUBLISH in pubsub in the frequent case that CREATE and UPDATE are
+      not needed on the same resource.
+
+   DELETE
+      Remove the representation of the selected resource.  Typically
+      uses DELETE in CoAP or HTTP.  There is no natural mapping to
+      pubsub if a remove operation is not provided.
+
+   OBSERVE
+      Obtain a sequence of representations of the selected resource,
+      indicating state updates which occur on the resource.  Typically
+      uses CoAP Observe, HTTP EventSource, MQTT SUBSCRIBE.  OBSERVE is
+      the transfer equivalent of performing a RETRIEVE on the resource
+      immediately following each state change of the resource.
+
+5.  Collections
+
+5.1.  Base element
+
+   A base element describe the context under which to interpret values
+   in items within the representation of a colection.
+
+   The base name element (bn) indicates the base URI or an absolute
+   reference from which to base relative references found in the links.
+   It functions as an embedded base URI reference as per [RFC3986]
+   Section 5.1.1
+
+   The format of the base elements are specified in
+   [I-D.ietf-core-senml].  Figure 1 is an example of a base name
+   element.
+
+       "bn": "/dev/sen/temp/"
+
+                     Figure 1: SenML Base Name Example
+
+   Other base items from SenML are permissible, including base time (bt)
+   and base value(bv).  If additional senml base element are present,
+   the client MUST interpret the items in the collection in the context
+   of the applicable base elements.  For example, if there is a "bv" or
+   base value elment, all of the returned values from items in the
+   collection MUST be added to the base value as per
+   [I-D.ietf-core-senml].
+
+5.2.  Link element
+
+   A link element is a hyperlinks based on the structure and syntax of
+   [RFC6690].  An example of link elements
+
+
+
+
+Koster                  Expires December 26, 2016               [Page 6]
+
+Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
+
+
+5.3.  Item element
+
+   An item element in a collection is a data element that is referenced
+   by a URI in the collection.  THe URI reference to an item in a
+   collection must use the collection URI as context or specify a link
+   anchor property to override the default context.
+
+   Items may be embedded in the collection, they may be subresources of
+   the collection, or they may be items in other collections referenced
+   by links in the collection.
+
+   Items in the collection must be indicated by a relative references
+   (href) that serve as a selection variables for matching to URI
+   parameters and resource names in multi-resource representataions.
+
+6.  Representation Formats
+
+   Example Serialization Formats {#example-formats} Figure 2 shows an
+   example document in hsml+json format
+
+   {
+   }
+
+                  Figure 2: application/hsml+json Example
+
+7.  URI and Parameter Processing
+
+   The HSML media type defines URI reference processing and URI Query
+   processing but does not in general define fragment (#) references in
+   URIs.
+
+   If fragment references are provided in a particular transfer
+   implementation, they should be used to select single items in
+   collections in accordance with current practice.
+
+7.1.  URI Path Processing
+
+   The path part of the URI reference used to indicate HSML resources
+   may be used as a reference to a collection or to an item in a
+   collection.  Collection references should contain the trailing slash
+   character "/" in accordance with BCP.  Server implementations should
+   return links to collections with the trailing "/", and should attempt
+   to accept references to collections without the trailing "/" if such
+   references can be used to construct unambiguous references.
+
+   References to items in a collection should not contain the trailing
+   "/" character.  Servers should return item references that do not
+   contain the trailing "/" character, and should should attempt to
+
+
+
+Koster                  Expires December 26, 2016               [Page 7]
+
+Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
+
+
+   accept references to items in collections with the trailing "/" if
+   such references can be used to construct unambiguous references.
+
+   URI references may be routed to collections in the order in which
+   path segments appear in the reference, from left to right reading the
+   path string, separated by "/" characters.
+
+   URI references may alternatively be routed as opaque strings to
+   resources.  In this case, the resolution of relative references to
+   items in a collection should be possible by concatenating the
+   relative reference to the context URI of the collection.  Note that
+   this may enforce certain naming conventions such as the trailing
+   slash in practice.
+
+7.2.  URI Parameter processing
+
+   URI Parameters, typically mapped as query parameters in HTTP and
+   CoAP, are used for selecting resources, selecting partial
+   representations, and otherwise modifying aspects of the expected or
+   included representation.  In this way, they may be considered part of
+   the URI, since they help identify a unique representation to be
+   transferred.
+
+7.2.1.  Resource selection
+
+   URI Parameters may be used to select resources in a collection for
+   transfer.  This is done using the common parameter matching rules
+   specified in [RFC6690].
+
+   Resource selection is performed based on matching URI Parameters with
+   Link Parameters of all links in the collection which are exposed by
+   the indicated media type and interface type.  URI Parameters listed
+   in Section 10.2 are excluded from the matching process.
+
+8.  Transfer Model Mapping
+
+8.1.  Collection
+
+8.1.1.  RETRIEVE
+
+   List Collection Links and Items
+
+8.1.2.  CREATE
+
+   Add Items and Links
+
+
+
+
+
+
+Koster                  Expires December 26, 2016               [Page 8]
+
+Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
+
+
+8.1.3.  UPDATE
+
+   Replace Entire Collection
+
+8.1.4.  DELETE
+
+   Remove Entire Collection
+
+8.2.  Links
+
+8.2.1.  RETRIEVE
+
+   List Links
+
+8.2.2.  CREATE
+
+   Add Links only
+
+8.2.3.  UPDATE (including partial update)
+
+   Modify Links
+
+8.2.4.  DELETE
+
+   Remove Links
+
+8.3.  Items
+
+8.3.1.  Link Embedding Items
+
+   Collective operations on items in collections are invoked by using
+   the URI of the collections, along with URI parameters, to select one
+   or more items in the collection.
+
+8.3.2.  RETRIEVE
+
+   Retrieve Items
+
+8.3.3.  UPDATE
+
+   Modify Items
+
+8.3.4.  DELETE
+
+   Remove Items
+
+
+
+
+
+
+Koster                  Expires December 26, 2016               [Page 9]
+
+Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
+
+
+8.4.  Groups
+
+   Group transfer operations are provided by collections that contain
+   links with the "grp" relation value.
+
+   Transfer operations which specify the collection URI as target are
+   sent to the resolved URI of each link in the collection that contains
+   the "grp" relation.
+
+   URI Parameters may be used to select a particular subset of target
+   resources within the group in the collection.
+
+   Responses from the selected group resources are aggregated and by
+   default returned as a single response.  The group response SHOULD be
+   returned as an outer array where such representation is available,
+   for example a JSON array which contains elements consisting of SenML
+   responses.
+
+   Optionally, a chunked response may be specified, if allowed by the
+   transfer implementation, in which the response from each group member
+   is returned individually as a sequence of responses.
+
+9.  Link extensions
+
+9.1.  Forms
+
+   Forms are hypermedia controls used to construct transfer operations
+   that change the state of resources.  The vocabulary and semantics
+   roughly follows the use of forms in HTML [RFC1866].
+
+9.2.  Bindings
+
+   Bindings are hypermedia controls used to construct transfer
+   operations that expose state changes of resources.  A binding invokes
+   an outbound transfer operation on a target resource.
+
+10.  Reserved Identifiers
+
+   This section defines the common reserved identifiers that are
+   expected to be processed by implementations of HSML clients and
+   servers.  There are many more relation types and link parameters
+   defined and registered with IANA.  Implementations should not
+   restrict processing to the keywords identified in this document; they
+   should accept all IANA registered keywords as valid identifiers.
+
+   Many of the keywords listed are defined in other RFCs and IETF
+   documents.  This document does not redefine any existing keywords.
+   Where a definition exists, the existing definition will be used.
+
+
+
+Koster                  Expires December 26, 2016              [Page 10]
+
+Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
+
+
+   Where multiple conflicting definitions exist, this document will
+   indicate the required definition.
+
+   New definitions are summarized in Section 11.
+
+10.1.  Default CURIE
+
+   Identifiers in representations using the HSML media types are assumed
+   to use the default CURIE "hsml".  An identifier that is not matched
+   to an existing namespace is assumed to carry the prefix "hsml".
+
+   For example, if the identifier "method" is encountered and it doesn't
+   resolve to an IANA registered parameter (reg-parameter in [RFC5988])
+   resolution should be attempted using "hsml:method".
+
+10.2.  URI Parameters
+
+   The following URI Parameters are used to filter representations
+   according to specific processing rules and should not be used to
+   attempt to match link parameters.
+
+   "if"  Interface type, used to select a partial representation of a
+      collection
+
+   "count"  Indicates the number of items to be returned from the
+      collection
+
+   "start"  Indicates the array index of the item in the collection to
+      select as the first item to be returned
+
+   "page"  Page number, in units of count
+
+10.3.  Link Keywords
+
+   The following keywords are reserved for use in an HSML serialization
+   to indicate elements of a web link
+
+   "anchor"
+      overrides the default resource context of the link
+
+   "rel"
+      link relation type as defined in [RFC5988] and [RFC6690]
+
+   "href"
+      target of a link reference.  This may be a relative reference in
+      the collection e.g. "currentValue" or a local absolute reference
+      "/sensors/temp/currentValue" or a full reference
+      "https://example.com/sensors/temp/currentValue"
+
+
+
+Koster                  Expires December 26, 2016              [Page 11]
+
+Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
+
+
+10.3.1.  Link Relation Types
+
+   The following keywords are reserved for use in a HSML serialization
+   to indicate types of link relations, and are used for values of
+   "rel".
+
+   "self"
+      refers to the collection that contains the link
+
+   "item"
+      the link points to an item in the collection
+
+   "sub"
+      the link points to a subresource item of the collection
+
+   "grp"
+      the item the link points to is available for collective
+      interaction through the collection URI according to group
+      semantics described in {}
+
+10.3.2.  Link Attribute Types
+
+   The following keywords are reserved for use in a HSML serialization
+   to indicate types of link attributes
+
+   "rt"
+      the resource type(s) of the item
+
+   "u"
+      units of measure
+
+   "ct"
+      the CoAP content-format number(s) associated with the item
+
+   "content-type"
+      the media type string(s) associated with the item
+
+   "obs"
+      presence of this attribute indicates that the associated resource
+      is observable
+
+10.4.  Item Keywords
+
+   The following keywords are reserved for use in a HSML serialization
+   to indicate elements within the serialization.  These are defined in
+   [I-D.ietf-core-senml].
+
+   "bn"
+
+
+
+Koster                  Expires December 26, 2016              [Page 12]
+
+Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
+
+
+      the base name or base URI of the collection, relative to the
+      service location e.g. "/sensors/temp/"
+
+   "bt"
+      the base time that corresponds to the encapsulated state of the
+      collection
+
+   "t"
+      the time stamp that corresponds to the encapsulated state of the
+      item in the collection, relative to the base time "bt"
+
+   "n"
+      the name or URI of the resource, relative to the base name of the
+      collection e.g. "currentValue".
+
+   "u"
+      units of measure
+
+   "v"
+      number value
+
+   "vb"
+      boolean value
+
+   "vd"
+      data value, an extension to the senml value types to enable
+      embedded data objects
+
+   "vs"
+      string value
+
+10.5.  Link Parameters used in Forms
+
+   "anchor"
+      May override the default context of a form and store it in a
+      different location from the subject resource
+
+   "rel"
+      Indicates the action being exposed by the form
+
+   "action"
+      URI for mapping an action specified in a form, similar to "href"
+      in links
+
+   "type"
+      Additional indicator of the action being exposed, can be used with
+      "rel"
+
+
+
+
+Koster                  Expires December 26, 2016              [Page 13]
+
+Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
+
+
+   "method"
+      Transfer method to use on a particular action
+
+   "accepts"
+      The Content-Types that are accepted on create and update methods
+
+   "content-type"
+      The Content-Types that are exposed by retrieve and observe methods
+
+   "ct"
+      the CoAP content-format number(s) exposed or accepted
+
+   "schema"
+      Indicates the schema to use for constructing or interpreting
+      transfer payloads, may be a literal value or a URI pointing to an
+      instance of a schema
+
+10.6.  Link Parameters used in Bindings
+
+   "id"
+      The relative URI of this binding in its containing collection
+
+   "anchor"
+      May override the context URI of a binding with any observable
+      resource
+
+   "rel"
+      Link relation indicates that this is a binding using the value
+      "boundto"
+
+   "target"
+      The URI to bind to the context URI, where transfer operations will
+      be sent, similar to "href" in links
+
+   "method"
+      Transfer method to use for notifications
+
+   "content-type"
+      The Content-Type to use in the transfer operation
+
+   "ct"
+      the CoAP content-format number to use in the transfer operation
+
+   "schema"
+      Schema to use in constructing the notification transfer payload
+
+   "pmin"
+      Minimum time between notification from a binding
+
+
+
+Koster                  Expires December 26, 2016              [Page 14]
+
+Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
+
+
+   "pmax"
+      Maximum time between notifications from a binding
+
+   "gt"
+      value to match or exceed to determine notification condition
+
+   "lt"
+      value to match or be less than to determine notification condition
+
+   "st"
+      value change +/- from last report to determine notification
+      condition
+
+   "eq"
+      value to match, or change from, to determine notification
+      condition
+
+   "nbll"
+      Defines a lower limit, at or above which notification is enabled
+
+   "nbul"
+      Defines an upper limit, at or below which notification is enabled
+
+   "init"
+      Starts the notification state machine with an initial value
+
+11.  IANA Considerations
+
+11.1.  New Media Types for IANA Media Type registry
+
+   type - hsml subtypes - collection - link - item
+
+   application/hsml application/hsml.collection application/hsml.link
+   application/hsml.item
+
+   application/hsml+json application/hsml.collection+json application/
+   hsml.link+json application/hsml.item+json
+
+11.2.  New Content Formats for the IANA CoRE Parameters Registry
+
+   (subject to Structured Syntax encoding rules TBD) 22000 -
+   application/hsml+json 22001 - application/hsml.link+json 22002 -
+   application/hsml.item+json
+
+
+
+
+
+
+
+
+Koster                  Expires December 26, 2016              [Page 15]
+
+Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
+
+
+11.3.  New Link Parameters
+
+   method schema content-type ct
+
+   (the following should be registered in the CoRE Interfaces spin-off
+   draft on asynchronous notification)
+
+   pmin pmax nbll nbul init lt gt st eq
+
+11.4.  New Link Relation Types (rel=)
+
+   sub grp
+
+   (the following should be registered in the CoRE Interfaces spin-off
+   draft on asynchronous notification)
+
+   boundto
+
+11.5.  New Interface types (if=) for the IANA CoRE Parameters Registry
+
+   hsml.collection hsml.item hsml.link
+
+12.  Security Considerations
+
+12.1.  Object Signing
+
+   Collection representations are resource state encapsulations and may
+   be transmitted and stored as signed objects in order to protect the
+   integrity of data and metadata, including time and embedded access
+   control information.
+
+12.2.  Signed Embedded Time Stamps
+
+   The collection may include time stamps (bt and t) that are signed
+   with the object data and metadata.
+
+12.3.  Signed Embedded Access Control
+
+   The collection representation may include embedded access control
+   information, also signed with the metadata, that can instruct the
+   server to enforce a particular access policy for transfer requests.
+
+12.4.  Secure State Updates
+
+   Representations submitted to a server to update the state of a
+   resource (UPDATE, CREATE, DELETE) may also contain embedded signed
+   assertions which may be used by the server to decide whether to apply
+   or reject the update.
+
+
+
+Koster                  Expires December 26, 2016              [Page 16]
+
+Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
+
+
+12.5.  Object Signing and Encryption
+
+   Object signing and encryption SHOULD use the mechanisms specified in
+   IETF documents for secure JSON Objects [RFC7516] and CBOR Objects
+   [I-D.ietf-cose-msg].
+
+13.  Design Patterns
+
+13.1.  RESTful Actuation using collections
+
+13.2.  RESTful Events and Alerts using collections
+
+14.  Informative References
+
+   [I-D.ietf-core-interfaces]
+              Shelby, Z., Vial, M., Koster, M., and C. Groves, "Reusable
+              Interface Definitions for Constrained RESTful
+              Environments", draft-ietf-core-interfaces-05 (work in
+              progress), July 2016.
+
+   [I-D.ietf-core-links-json]
+              Li, K., Rahman, A., and C. Bormann, "Representing CoRE
+              Formats in JSON and CBOR", draft-ietf-core-links-json-06
+              (work in progress), July 2016.
+
+   [I-D.ietf-core-resource-directory]
+              Shelby, Z., Koster, M., Bormann, C., and P. Stok, "CoRE
+              Resource Directory", draft-ietf-core-resource-directory-08
+              (work in progress), July 2016.
+
+   [I-D.ietf-core-senml]
+              Jennings, C., Shelby, Z., Arkko, J., Keranen, A., and C.
+              Bormann, "Media Types for Sensor Markup Language (SenML)",
+              draft-ietf-core-senml-02 (work in progress), July 2016.
+
+   [I-D.ietf-cose-msg]
+              Schaad, J., "CBOR Object Signing and Encryption (COSE)",
+              draft-ietf-cose-msg-14 (work in progress), June 2016.
+
+   [REST]     Fielding, R., "Architectural Styles and the Design of
+              Network-based Software Architectures", Ph.D. Dissertation,
+              University of California, Irvine, 2000,
+              <http://www.ics.uci.edu/~fielding/pubs/dissertation/
+              fielding_dissertation.pdf>.
+
+   [RFC1866]  Berners-Lee, T. and D. Connolly, "Hypertext Markup
+              Language - 2.0", RFC 1866, DOI 10.17487/RFC1866, November
+              1995, <http://www.rfc-editor.org/info/rfc1866>.
+
+
+
+Koster                  Expires December 26, 2016              [Page 17]
+
+Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
+
+
+   [RFC3986]  Berners-Lee, T., Fielding, R., and L. Masinter, "Uniform
+              Resource Identifier (URI): Generic Syntax", STD 66,
+              RFC 3986, DOI 10.17487/RFC3986, January 2005,
+              <http://www.rfc-editor.org/info/rfc3986>.
+
+   [RFC5988]  Nottingham, M., "Web Linking", RFC 5988,
+              DOI 10.17487/RFC5988, October 2010,
+              <http://www.rfc-editor.org/info/rfc5988>.
+
+   [RFC6690]  Shelby, Z., "Constrained RESTful Environments (CoRE) Link
+              Format", RFC 6690, DOI 10.17487/RFC6690, August 2012,
+              <http://www.rfc-editor.org/info/rfc6690>.
+
+   [RFC7252]  Shelby, Z., Hartke, K., and C. Bormann, "The Constrained
+              Application Protocol (CoAP)", RFC 7252,
+              DOI 10.17487/RFC7252, June 2014,
+              <http://www.rfc-editor.org/info/rfc7252>.
+
+   [RFC7516]  Jones, M. and J. Hildebrand, "JSON Web Encryption (JWE)",
+              RFC 7516, DOI 10.17487/RFC7516, May 2015,
+              <http://www.rfc-editor.org/info/rfc7516>.
+
+   [T2TRG]    IRTF, ., "IRTF Thing to Thing Research Group", 2016,
+              <https://datatracker.ietf.org/rg/t2trg/charter/>.
+
+   [W3C-WoT]  WoT IG, ., "W3C Web of Things Interest Group", 2016,
+              <https://www.w3.org/WoT/IG/>.
+
+Author's Address
+
+   Michael Koster
+   SmartThings
+   1281 Lawrence Station Road
+   Sunnyvale  94089
+   USA
+
+   Phone: +1-707-502-5136
+   Email: michael.koster@smartthings.com
+
+
+
+
+
+
+
+
+
+
+
+
+
+Koster                  Expires December 26, 2016              [Page 18]
