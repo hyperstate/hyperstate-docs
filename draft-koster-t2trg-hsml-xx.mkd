@@ -17,7 +17,7 @@ title: Media Types for Hypertext Sensor Markup
 area: Internet
 wg: Thing-to-Thing Research Group
 kw: T2TRG, Web of Things, Hypermedia, Semantic Interoperability
-date: 2016-6-24
+date: 2016-7-10
 author:
 - ins: M. Koster
   name: Michael Koster
@@ -304,6 +304,8 @@ Identifiers in representations using the HSML media types are assumed to use the
 
 For example, if the identifier "method" is encountered and it doesn't resolve to an IANA registered parameter (reg-parameter in {{RFC5988}}) resolution should be attempted using "hsml:method".
 
+The default CURIE "hsml" identifies a namespace defined by the identifiers in {{reserved-identifiers}} of this document.
+
 ## URI Parameters {#uri-params}
 
 The following URI Parameters are used to filter representations according to specific processing rules and should not be used to attempt to match link parameters.
@@ -392,8 +394,8 @@ The following keywords are reserved for use in a HSML serialization to indicate 
 "vb"
 :    boolean value
 
-"vd"
-:    data value, an extension to the senml value types to enable embedded data objects
+"vo"
+:    object value, an extension to the senml value types to enable embedded data objects
 
 "vs"
 :    string value
@@ -405,10 +407,10 @@ The following keywords are reserved for use in a HSML serialization to indicate 
 :    May override the default context of a form and store it in a different location from the subject resource
 
 "rel"
-:    Indicates the action being exposed by the form
+:    Indicates that this control is a form; MUST contain the value "action"
 
-"action"
-:    URI for mapping an action specified in a form, similar to "href" in links
+"href"
+:    URI for mapping the action specified in the form
 
 "type"
 :    Additional indicator of the action being exposed, can be used with "rel"
@@ -435,10 +437,10 @@ The following keywords are reserved for use in a HSML serialization to indicate 
 :    May override the context URI of a binding with any observable resource
 
 "rel"
-:    Link relation indicates that this is a monitor using the value "monitor"
+:    Indicates that this control is a monitor; MUST contain the value "monitor"
 
 "href"
-:    The URI of the resource used to bmonitor context URI, where transfer operations will be sent.
+:    The URI of the resource used to monitor context URI, where transfer operations will be sent.
 
 "accept"
 :    The media type string or CoAP content-format to request from the observed resource
@@ -460,6 +462,9 @@ The following keywords are reserved for use in a HSML serialization to indicate 
 
 "target-schema"
 :    Schema to use in constructing the notification transfer payload, default is to transfer the accepted payload unmodified to the target resource.
+{: vspace='0'}
+
+## Conditional Observe Parameters used in Monitor links
 
 "pmin"
 :    Minimum time between notification from a binding
