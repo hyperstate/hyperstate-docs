@@ -121,35 +121,35 @@ Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
      8.4.  Groups  . . . . . . . . . . . . . . . . . . . . . . . . .  10
    9.  Link extensions . . . . . . . . . . . . . . . . . . . . . . .  10
      9.1.  Forms . . . . . . . . . . . . . . . . . . . . . . . . . .  10
-     9.2.  Bindings  . . . . . . . . . . . . . . . . . . . . . . . .  10
+     9.2.  Monitors  . . . . . . . . . . . . . . . . . . . . . . . .  10
    10. Reserved Identifiers  . . . . . . . . . . . . . . . . . . . .  10
      10.1.  Default CURIE  . . . . . . . . . . . . . . . . . . . . .  11
      10.2.  URI Parameters . . . . . . . . . . . . . . . . . . . . .  11
      10.3.  Link Keywords  . . . . . . . . . . . . . . . . . . . . .  11
        10.3.1.  Link Relation Types  . . . . . . . . . . . . . . . .  12
        10.3.2.  Link Attribute Types . . . . . . . . . . . . . . . .  12
-     10.4.  Item Keywords  . . . . . . . . . . . . . . . . . . . . .  12
+     10.4.  Item Keywords  . . . . . . . . . . . . . . . . . . . . .  13
      10.5.  Link Parameters used in Forms  . . . . . . . . . . . . .  13
-     10.6.  Link Parameters used in Bindings . . . . . . . . . . . .  14
-   11. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  15
-     11.1.  New Media Types for IANA Media Type registry . . . . . .  15
+     10.6.  Link Parameters used in Monitors . . . . . . . . . . . .  14
+   11. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  16
+     11.1.  New Media Types for IANA Media Type registry . . . . . .  16
      11.2.  New Content Formats for the IANA CoRE Parameters
-            Registry . . . . . . . . . . . . . . . . . . . . . . . .  15
-     11.3.  New Link Parameters  . . . . . . . . . . . . . . . . . .  16
-     11.4.  New Link Relation Types (rel=) . . . . . . . . . . . . .  16
-     11.5.  New Interface types (if=) for the IANA CoRE Parameters
             Registry . . . . . . . . . . . . . . . . . . . . . . . .  16
-   12. Security Considerations . . . . . . . . . . . . . . . . . . .  16
-     12.1.  Object Signing . . . . . . . . . . . . . . . . . . . . .  16
-     12.2.  Signed Embedded Time Stamps  . . . . . . . . . . . . . .  16
-     12.3.  Signed Embedded Access Control . . . . . . . . . . . . .  16
-     12.4.  Secure State Updates . . . . . . . . . . . . . . . . . .  16
-     12.5.  Object Signing and Encryption  . . . . . . . . . . . . .  17
-   13. Design Patterns . . . . . . . . . . . . . . . . . . . . . . .  17
-     13.1.  RESTful Actuation using collections  . . . . . . . . . .  17
-     13.2.  RESTful Events and Alerts using collections  . . . . . .  17
-   14. Informative References  . . . . . . . . . . . . . . . . . . .  17
-   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  18
+     11.3.  New Link Parameters  . . . . . . . . . . . . . . . . . .  17
+     11.4.  New Link Relation Types (rel=) . . . . . . . . . . . . .  17
+     11.5.  New Interface types (if=) for the IANA CoRE Parameters
+            Registry . . . . . . . . . . . . . . . . . . . . . . . .  17
+   12. Security Considerations . . . . . . . . . . . . . . . . . . .  18
+     12.1.  Object Signing . . . . . . . . . . . . . . . . . . . . .  18
+     12.2.  Signed Embedded Time Stamps  . . . . . . . . . . . . . .  18
+     12.3.  Signed Embedded Access Control . . . . . . . . . . . . .  18
+     12.4.  Secure State Updates . . . . . . . . . . . . . . . . . .  18
+     12.5.  Object Signing and Encryption  . . . . . . . . . . . . .  18
+   13. Design Patterns . . . . . . . . . . . . . . . . . . . . . . .  18
+     13.1.  RESTful Actuation using collections  . . . . . . . . . .  18
+     13.2.  RESTful Events and Alerts using collections  . . . . . .  18
+   14. Informative References  . . . . . . . . . . . . . . . . . . .  18
+   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  20
 
 1.  Scope of this document
 
@@ -536,11 +536,12 @@ Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
    that change the state of resources.  The vocabulary and semantics
    roughly follows the use of forms in HTML [RFC1866].
 
-9.2.  Bindings
+9.2.  Monitors
 
-   Bindings are hypermedia controls used to construct transfer
-   operations that expose state changes of resources.  A binding invokes
-   an outbound transfer operation on a target resource.
+   Monitors are hypermedia controls used to construct transfer
+   operations that expose state changes of resources.  A monitor invokes
+   an outbound transfer operation on a target resource.  Monitors use
+   the IANA registered link relation "monitor", defined in [RFC5989].
 
 10.  Reserved Identifiers
 
@@ -553,7 +554,6 @@ Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
 
    Many of the keywords listed are defined in other RFCs and IETF
    documents.  This document does not redefine any existing keywords.
-   Where a definition exists, the existing definition will be used.
 
 
 
@@ -562,6 +562,7 @@ Koster                  Expires December 26, 2016              [Page 10]
 Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
 
 
+   Where a definition exists, the existing definition will be used.
    Where multiple conflicting definitions exist, this document will
    indicate the required definition.
 
@@ -608,8 +609,7 @@ Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
    "href"
       target of a link reference.  This may be a relative reference in
       the collection e.g. "currentValue" or a local absolute reference
-      "/sensors/temp/currentValue" or a full reference
-      "https://example.com/sensors/temp/currentValue"
+
 
 
 
@@ -617,6 +617,9 @@ Koster                  Expires December 26, 2016              [Page 11]
 
 Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
 
+
+      "/sensors/temp/currentValue" or a full reference
+      "https://example.com/sensors/temp/currentValue"
 
 10.3.1.  Link Relation Types
 
@@ -659,13 +662,10 @@ Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
       presence of this attribute indicates that the associated resource
       is observable
 
-10.4.  Item Keywords
 
-   The following keywords are reserved for use in a HSML serialization
-   to indicate elements within the serialization.  These are defined in
-   [I-D.ietf-core-senml].
 
-   "bn"
+
+
 
 
 
@@ -674,6 +674,13 @@ Koster                  Expires December 26, 2016              [Page 12]
 Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
 
 
+10.4.  Item Keywords
+
+   The following keywords are reserved for use in a HSML serialization
+   to indicate elements within the serialization.  These are defined in
+   [I-D.ietf-core-senml].
+
+   "bn"
       the base name or base URI of the collection, relative to the
       service location e.g. "/sensors/temp/"
 
@@ -715,13 +722,6 @@ Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
       Indicates the action being exposed by the form
 
    "action"
-      URI for mapping an action specified in a form, similar to "href"
-      in links
-
-   "type"
-      Additional indicator of the action being exposed, can be used with
-      "rel"
-
 
 
 
@@ -730,54 +730,54 @@ Koster                  Expires December 26, 2016              [Page 13]
 Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
 
 
+      URI for mapping an action specified in a form, similar to "href"
+      in links
+
+   "type"
+      Additional indicator of the action being exposed, can be used with
+      "rel"
+
    "method"
       Transfer method to use on a particular action
 
-   "accepts"
-      The Content-Types that are accepted on create and update methods
+   "accept"
+      The Content-Types or CoAP content-formats that are accepted on
+      create and update methods
 
    "content-type"
       The Content-Types that are exposed by retrieve and observe methods
 
    "ct"
-      the CoAP content-format number(s) exposed or accepted
+      the CoAP content-format number(s) exposed
 
    "schema"
       Indicates the schema to use for constructing or interpreting
       transfer payloads, may be a literal value or a URI pointing to an
       instance of a schema
 
-10.6.  Link Parameters used in Bindings
-
-   "id"
-      The relative URI of this binding in its containing collection
+10.6.  Link Parameters used in Monitors
 
    "anchor"
       May override the context URI of a binding with any observable
       resource
 
    "rel"
-      Link relation indicates that this is a binding using the value
-      "boundto"
+      Link relation indicates that this is a monitor using the value
+      "monitor"
 
-   "target"
-      The URI to bind to the context URI, where transfer operations will
-      be sent, similar to "href" in links
+   "href"
+      The URI of the resource used to bmonitor context URI, where
+      transfer operations will be sent.
 
-   "method"
-      Transfer method to use for notifications
+   "accept"
+      The media type string or CoAP content-format to request from the
+      observed resource
 
    "content-type"
-      The Content-Type to use in the transfer operation
+      The media type string to use in the transfer operation
 
    "ct"
       the CoAP content-format number to use in the transfer operation
-
-   "schema"
-      Schema to use in constructing the notification transfer payload
-
-   "pmin"
-      Minimum time between notification from a binding
 
 
 
@@ -785,6 +785,25 @@ Koster                  Expires December 26, 2016              [Page 14]
 
 Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
 
+
+   "accept-method"
+      Transfer method to use in request from the observed resource,
+      default is OBSERVE
+
+   "target-method"
+      Transfer method to use for notifications, default is UPDATE
+
+   "accept-schema"
+      Schema to use in interpreting the observed resource payload,
+      required if target-schema is used.
+
+   "target-schema"
+      Schema to use in constructing the notification transfer payload,
+      default is to transfer the accepted payload unmodified to the
+      target resource.
+
+   "pmin"
+      Minimum time between notification from a binding
 
    "pmax"
       Maximum time between notifications from a binding
@@ -812,25 +831,6 @@ Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
    "init"
       Starts the notification state machine with an initial value
 
-11.  IANA Considerations
-
-11.1.  New Media Types for IANA Media Type registry
-
-   type - hsml subtypes - collection - link - item
-
-   application/hsml application/hsml.collection application/hsml.link
-   application/hsml.item
-
-   application/hsml+json application/hsml.collection+json application/
-   hsml.link+json application/hsml.item+json
-
-11.2.  New Content Formats for the IANA CoRE Parameters Registry
-
-   (subject to Structured Syntax encoding rules TBD) 22000 -
-   application/hsml+json 22001 - application/hsml.link+json 22002 -
-   application/hsml.item+json
-
-
 
 
 
@@ -842,27 +842,117 @@ Koster                  Expires December 26, 2016              [Page 15]
 Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
 
 
+11.  IANA Considerations
+
+11.1.  New Media Types for IANA Media Type registry
+
+   Type
+
+   o  application
+
+   Subtypes
+
+   o  hsml
+
+   o  hsml.collection
+
+   o  hsml.link
+
+   o  hsml.item
+
+   Media type strings
+
+   o  application/hsml
+
+   o  application/hsml.collection
+
+   o  application/hsml.link
+
+   o  application/hsml.item
+
+   o  application/hsml+json
+
+   o  application/hsml.collection+json
+
+   o  application/hsml.link+json
+
+   o  application/hsml.item+json
+
+11.2.  New Content Formats for the IANA CoRE Parameters Registry
+
+   (subject to Structured Syntax encoding rules TBD)
+
+   o  22000 - application/hsml+json
+
+   o  22001 - application/hsml.link+json
+
+   o  22002 - application/hsml.item+json
+
+
+
+
+
+
+Koster                  Expires December 26, 2016              [Page 16]
+
+Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
+
+
 11.3.  New Link Parameters
 
-   method schema content-type ct
+   o  method
 
-   (the following should be registered in the CoRE Interfaces spin-off
-   draft on asynchronous notification)
+   o  schema
 
-   pmin pmax nbll nbul init lt gt st eq
+   o  content-type
+
+   o  ct
+
+   The following should be registered in the CoRE dynamic linking draft
+   [I-D.groves-core-dynlink].
+
+   o  pmin
+
+   o  pmax
+
+   o  nbll
+
+   o  nbul
+
+   o  init
+
+   o  lt
+
+   o  gt
+
+   o  st
+
+   o  eq
 
 11.4.  New Link Relation Types (rel=)
 
-   sub grp
+   o  sub
 
-   (the following should be registered in the CoRE Interfaces spin-off
-   draft on asynchronous notification)
-
-   boundto
+   o  grp
 
 11.5.  New Interface types (if=) for the IANA CoRE Parameters Registry
 
-   hsml.collection hsml.item hsml.link
+   o  hsml.collection
+
+   o  hsml.item
+
+   o  hsml.link
+
+
+
+
+
+
+
+Koster                  Expires December 26, 2016              [Page 17]
+
+Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
+
 
 12.  Security Considerations
 
@@ -891,13 +981,6 @@ Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
    assertions which may be used by the server to decide whether to apply
    or reject the update.
 
-
-
-Koster                  Expires December 26, 2016              [Page 16]
-
-Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
-
-
 12.5.  Object Signing and Encryption
 
    Object signing and encryption SHOULD use the mechanisms specified in
@@ -911,6 +994,21 @@ Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
 13.2.  RESTful Events and Alerts using collections
 
 14.  Informative References
+
+   [I-D.groves-core-dynlink]
+              Shelby, Z., Vial, M., Koster, M., and C. Groves, "Dynamic
+              Resource Linking for Constrained RESTful Environments",
+              draft-groves-core-dynlink-00 (work in progress), July
+              2016.
+
+
+
+
+
+Koster                  Expires December 26, 2016              [Page 18]
+
+Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
+
 
    [I-D.ietf-core-interfaces]
               Shelby, Z., Vial, M., Koster, M., and C. Groves, "Reusable
@@ -947,13 +1045,6 @@ Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
               Language - 2.0", RFC 1866, DOI 10.17487/RFC1866, November
               1995, <http://www.rfc-editor.org/info/rfc1866>.
 
-
-
-Koster                  Expires December 26, 2016              [Page 17]
-
-Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
-
-
    [RFC3986]  Berners-Lee, T., Fielding, R., and L. Masinter, "Uniform
               Resource Identifier (URI): Generic Syntax", STD 66,
               RFC 3986, DOI 10.17487/RFC3986, January 2005,
@@ -962,6 +1053,18 @@ Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
    [RFC5988]  Nottingham, M., "Web Linking", RFC 5988,
               DOI 10.17487/RFC5988, October 2010,
               <http://www.rfc-editor.org/info/rfc5988>.
+
+   [RFC5989]  Roach, A., "A SIP Event Package for Subscribing to Changes
+              to an HTTP Resource", RFC 5989, DOI 10.17487/RFC5989,
+              October 2010, <http://www.rfc-editor.org/info/rfc5989>.
+
+
+
+
+Koster                  Expires December 26, 2016              [Page 19]
+
+Internet-Draft   Media Types for Hypertext Sensor Markup       June 2016
+
 
    [RFC6690]  Shelby, Z., "Constrained RESTful Environments (CoRE) Link
               Format", RFC 6690, DOI 10.17487/RFC6690, August 2012,
@@ -1005,4 +1108,13 @@ Author's Address
 
 
 
-Koster                  Expires December 26, 2016              [Page 18]
+
+
+
+
+
+
+
+
+
+Koster                  Expires December 26, 2016              [Page 20]

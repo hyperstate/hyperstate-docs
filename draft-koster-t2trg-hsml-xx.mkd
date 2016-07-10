@@ -34,6 +34,7 @@ informative:
   I-D.ietf-core-links-json:
   RFC3986:
   RFC5988:
+  RFC5989:
   RFC7252:
   RFC7516:
   RFC1866:
@@ -41,6 +42,7 @@ informative:
   I-D.ietf-core-resource-directory:
   I-D.ietf-core-senml:
   I-D.ietf-cose-msg:
+  I-D.groves-core-dynlink:
 
   REST:
     target: http://www.ics.uci.edu/~fielding/pubs/dissertation/fielding_dissertation.pdf
@@ -284,9 +286,9 @@ Optionally, a chunked response may be specified, if allowed by the transfer impl
 
 Forms are hypermedia controls used to construct transfer operations that change the state of resources. The vocabulary and semantics roughly follows the use of forms in HTML {{RFC1866}}.
 
-## Bindings
+## Monitors
 
-Bindings are hypermedia controls used to construct transfer operations that expose state changes of resources. A binding invokes an outbound transfer operation on a target resource. 
+Monitors are hypermedia controls used to construct transfer operations that expose state changes of resources. A monitor invokes an outbound transfer operation on a target resource. Monitors use the IANA registered link relation "monitor", defined in {{RFC5989}}.
 
 # Reserved Identifiers {#reserved-identifiers}
 
@@ -414,44 +416,50 @@ The following keywords are reserved for use in a HSML serialization to indicate 
 "method"
 :    Transfer method to use on a particular action
 
-"accepts"
-:    The Content-Types that are accepted on create and update methods
+"accept"
+:    The Content-Types or CoAP content-formats that are accepted on create and update methods
 
 "content-type"
 :    The Content-Types that are exposed by retrieve and observe methods
 
 "ct"
-:    the CoAP content-format number(s) exposed or accepted
+:    the CoAP content-format number(s) exposed 
 
 "schema"
 :    Indicates the schema to use for constructing or interpreting transfer payloads, may be a literal value or a URI pointing to an instance of a schema
 {: vspace='0'}
 
-## Link Parameters used in Bindings
-
-"id"
-:    The relative URI of this binding in its containing collection
+## Link Parameters used in Monitors
 
 "anchor"
 :    May override the context URI of a binding with any observable resource
 
 "rel"
-:    Link relation indicates that this is a binding using the value "boundto"
+:    Link relation indicates that this is a monitor using the value "monitor"
 
-"target"
-:    The URI to bind to the context URI, where transfer operations will be sent, similar to "href" in links
+"href"
+:    The URI of the resource used to bmonitor context URI, where transfer operations will be sent.
 
-"method"
-:    Transfer method to use for notifications
+"accept"
+:    The media type string or CoAP content-format to request from the observed resource
 
 "content-type"
-:    The Content-Type to use in the transfer operation
+:    The media type string to use in the transfer operation
 
 "ct"
 :    the CoAP content-format number to use in the transfer operation
 
-"schema"
-:    Schema to use in constructing the notification transfer payload
+"accept-method"
+:    Transfer method to use in request from the observed resource, default is OBSERVE
+
+"target-method"
+:    Transfer method to use for notifications, default is UPDATE
+
+"accept-schema"
+:    Schema to use in interpreting the observed resource payload, required if target-schema is used.
+
+"target-schema"
+:    Schema to use in constructing the notification transfer payload, default is to transfer the accepted payload unmodified to the target resource.
 
 "pmin"
 :    Minimum time between notification from a binding
@@ -486,64 +494,67 @@ The following keywords are reserved for use in a HSML serialization to indicate 
 
 ## New Media Types for IANA Media Type registry
 
-type
-- hsml
-subtypes 
-- collection
-- link
-- item
+Type
 
-application/hsml 
-application/hsml.collection
-application/hsml.link
-application/hsml.item
+* application
 
-application/hsml+json
-application/hsml.collection+json
-application/hsml.link+json
-application/hsml.item+json
+Subtypes 
+
+* hsml
+* hsml.collection
+* hsml.link
+* hsml.item
+
+Media type strings
+
+* application/hsml 
+* application/hsml.collection
+* application/hsml.link
+* application/hsml.item
+
+* application/hsml+json
+* application/hsml.collection+json
+* application/hsml.link+json
+* application/hsml.item+json
 
 ## New Content Formats for the IANA CoRE Parameters Registry
 
 (subject to Structured Syntax encoding rules TBD)
-22000 - application/hsml+json 
-22001 - application/hsml.link+json
-22002 - application/hsml.item+json
+
+* 22000 - application/hsml+json 
+* 22001 - application/hsml.link+json
+* 22002 - application/hsml.item+json
 
 ## New Link Parameters
 
-method
-schema
-content-type
-ct
+* method
+* schema
+* content-type
+* ct
 
-(the following should be registered in the CoRE Interfaces spin-off draft on asynchronous notification)
+The following should be registered in the CoRE dynamic linking draft {{I-D.groves-core-dynlink}}.
 
-pmin
-pmax
-nbll
-nbul
-init
-lt
-gt
-st
-eq
+* pmin
+* pmax
+* nbll
+* nbul
+* init
+* lt
+* gt
+* st
+* eq
 
 
 ## New Link Relation Types (rel=)
 
-sub
-grp
-
-(the following should be registered in the CoRE Interfaces spin-off draft on asynchronous notification)
-
-boundto
+* sub
+* grp
 
 ## New Interface types (if=) for the IANA CoRE Parameters Registry
 
-hsml.collection
-hsml.item
-hsml.link
+* hsml.collection
+* hsml.item
+* hsml.link
 
 # Security Considerations
 
