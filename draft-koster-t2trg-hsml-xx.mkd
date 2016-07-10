@@ -81,7 +81,7 @@ The scale and scope of the worldwide web has been in part driven by the availabi
 
 # Scope of this document {#scope}
 
-This is a broadly scoped document which specifies representation formats, data models, interaction models, transfer mapping, URI processing, and some extensions including forms and bindings.
+This is a broadly scoped document which specifies representation formats, data models, interaction models, transfer mapping, URI processing, and some extensions including actions and bindings.
 
 The features listed above and new features may be specified and extended as needed in other documents which refer to this document.
 
@@ -116,7 +116,7 @@ JSON formatted examples are used in this document to illustrate normative and in
 
 ## Links
 
-Links follow the specifications in {{RFC5988}} and {{RFC6690}} with extensions to implement forms and bindings as described in this document and any referencing extension documents.
+Links follow the specifications in {{RFC5988}} and {{RFC6690}} with extensions to implement actions and monitors as described in this document and any referencing extension documents.
 
 ## Collections
 
@@ -160,38 +160,70 @@ OBSERVE
 # Collections {#collection-description}
 
 ## Base element
-A base element describe the context under which to interpret values in items within the representation of a colection.
+A base element describes the context under which to interpret values in items within the representation of a collection.
 
-The base name element (bn) indicates the base URI or an absolute reference from which to base relative references found in the links. It functions as an embedded base URI reference as per {{RFC3986}} Section 5.1.1
+The base name value (bn) indicates the base URI or an absolute reference from which to base relative references found in the links. It functions as an embedded base URI reference as per {{RFC3986}} Section 5.1.1
 
-The format of the base elements are specified in {{I-D.ietf-core-senml}}. {{fig-example-basename}} is an example of a base name element.
+The format of the base elements are specified in {{I-D.ietf-core-senml}}. {{fig-example-base-element}} is an example of a base  element.
 
 ~~~
-    "bn": "/dev/sen/temp/"
+    {
+      "bn": "/dev/sen/"
+    }
 ~~~    
-{: #fig-example-basename title='SenML Base Name Example' align="left"}
+{: #fig-example-base-element title='Example Base Element' align="left"}
 
 Other base items from SenML are permissible, including base time (bt) and base value(bv). If additional senml base element are present, the client MUST interpret the items in the collection in the context of the applicable base elements. For example, if there is a "bv" or base value elment, all of the returned values from items in the collection MUST be added to the base value as per {{I-D.ietf-core-senml}}.
 
 ## Link element
-A link element is a hyperlinks based on the structure and syntax of {{RFC6690}}. An example of link elements 
+A link element is a hyperlink based on the structure and syntax of {{RFC6690}} and {{I-D.ietf-core-links-json}}. An example link element is shown in {{fig-link-element}}.
+
+~~~~
+    {
+      "href": "temp",
+      "rt": "some.sensor"
+    }
+~~~~
+{: #fig-link-element title='Example Link Element' align="left"}
+
 
 ## Item element
-An item element in a collection is a data element that is referenced by a URI in the collection. THe URI reference to an item in a collection must use the collection URI as context or specify a link anchor property to override the default context.
+An item element in a collection is a data element that is referenced by a link in the collection. 
 
-Items may be embedded in the collection, they may be subresources of the collection, or they may be items in other collections referenced by links in the collection.
+Items in the collection are indicated by a references (href) that serve as a selection variables for matching to URI parameters and resource names in multi-resource representataions. Reference resolution should use the rules defined in {{RFC3986}}.
 
-Items in the collection must be indicated by a relative references (href) that serve as a selection variables for matching to URI parameters and resource names in multi-resource representataions.
+Items may be embedded in the collection, they may be subresources of the collection, or they may be items in other collections referenced by links in the collection. An example item element is shown in {{fig-item-element}}
+
+~~~~
+    {
+      "n": "temp",
+      "v": "77"
+    }
+~~~~
+{: #fig-item-element title='Example Item Element' align="left"}
+
+
 
 
 # Representation Formats {#representation-formats}
 
-Example Serialization Formats {#example-formats}
-{{fig-example-hsml}} shows an example document in hsml+json format
+## Example Serialization Formats {#example-formats}
+{{fig-example-hsml}} shows an example document in hsml+json format. This example contains a base element, a link element, and an item element.
 
 ~~~~
-{
-}
+    [
+      {
+        "bn": "/dev/sen/"
+      },
+      {
+        "href": "temp",
+        "rt": "some.sensor"
+      },
+      {
+        "n": "temp",
+        "v": "77"
+      }
+    ]
 ~~~~
 {: #fig-example-hsml title='application/hsml+json Example' align="left"}
 
@@ -228,10 +260,10 @@ Resource selection is performed based on matching URI Parameters with Link Param
 ## Collection
 
 ### RETRIEVE 
-List Collection Links and Items
+List Collection Elements
 
 ### CREATE 
-Add Items and Links
+Add Elements to Collection
 
 ### UPDATE 
 Replace Entire Collection
@@ -268,6 +300,9 @@ Modify Items
 ### DELETE
 Remove Items
 
+### CREATE
+Create Items with default links
+
 ## Groups 
 
 Group transfer operations are provided by collections that contain links with the "grp" relation value. 
@@ -282,13 +317,46 @@ Optionally, a chunked response may be specified, if allowed by the transfer impl
 
 # Link extensions
 
-## Forms
+## Actions
 
-Forms are hypermedia controls used to construct transfer operations that change the state of resources. The vocabulary and semantics roughly follows the use of forms in HTML {{RFC1866}}.
+Actions are hypermedia controls used to construct transfer operations that change the state of resources. The use roughly follows the use of forms in HTML {{RFC1866}}, with semantics more consistent with links.
+
+An example action element is shown in {{fig-action-element}}
+
+~~~~
+    {
+      "rel": "action"
+      "type": "st.on"
+      "href": "commands",
+      "rt": "st.command",
+      "method": "create",
+      "accept": "text/plain",
+      "schema": {"value": "on"}
+    }
+~~~~
+{: #fig-action-element title='Example action Element' align="left"}
+
 
 ## Monitors
 
 Monitors are hypermedia controls used to construct transfer operations that expose state changes of resources. A monitor invokes an outbound transfer operation on a target resource. Monitors use the IANA registered link relation "monitor", defined in {{RFC5989}}.
+
+An example item element is shown in {{fig-monitor-element}}
+
+~~~~
+    {
+      "rel": "monitor",
+      "href": "tank-level-events",
+      "content-type": "application/senml+json",
+      "target-method": "create",
+      "pmin": 600,
+      "pmax": 3600,
+      "nbul": 80,
+      "nbll": 20
+    }
+~~~~
+{: #fig-monitor-element title='Example Monitor Element' align="left"}
+
 
 # Reserved Identifiers {#reserved-identifiers}
 
@@ -344,9 +412,6 @@ The following keywords are reserved for use in a HSML serialization to indicate 
 "item"
 :    the link points to an item in the collection
 
-"sub"
-:    the link points to a subresource item of the collection
-
 "grp"
 :    the item the link points to is available for collective interaction through the collection URI according to group semantics described in {}
 {: vspace='0'}
@@ -401,16 +466,16 @@ The following keywords are reserved for use in a HSML serialization to indicate 
 :    string value
 {: vspace='0'}
 
-## Link Parameters used in Forms
+## Link Parameters used in Actions
 
 "anchor"
-:    May override the default context of a form and store it in a different location from the subject resource
+:    May override the default context of an action and store it in a different location from the subject resource
 
 "rel"
-:    Indicates that this control is a form; MUST contain the value "action"
+:    Indicates that this control is an action; MUST contain the value "action"
 
 "href"
-:    URI for mapping the action specified in the form
+:    URI for mapping the action specified in the action
 
 "type"
 :    Additional indicator of the action being exposed, can be used with "rel"
@@ -552,7 +617,6 @@ The following should be registered in the CoRE dynamic linking draft {{I-D.grove
 
 ## New Link Relation Types (rel=)
 
-* sub
 * grp
 
 ## New Interface types (if=) for the IANA CoRE Parameters Registry

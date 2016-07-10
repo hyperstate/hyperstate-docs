@@ -87,25 +87,25 @@ Table of Contents
    4.  Abstract Transfer Model . . . . . . . . . . . . . . . . . . .   5
    5.  Collections . . . . . . . . . . . . . . . . . . . . . . . . .   6
      5.1.  Base element  . . . . . . . . . . . . . . . . . . . . . .   6
-     5.2.  Link element  . . . . . . . . . . . . . . . . . . . . . .   6
+     5.2.  Link element  . . . . . . . . . . . . . . . . . . . . . .   7
      5.3.  Item element  . . . . . . . . . . . . . . . . . . . . . .   7
    6.  Representation Formats  . . . . . . . . . . . . . . . . . . .   7
-   7.  URI and Parameter Processing  . . . . . . . . . . . . . . . .   7
-     7.1.  URI Path Processing . . . . . . . . . . . . . . . . . . .   7
-     7.2.  URI Parameter processing  . . . . . . . . . . . . . . . .   8
-       7.2.1.  Resource selection  . . . . . . . . . . . . . . . . .   8
-   8.  Transfer Model Mapping  . . . . . . . . . . . . . . . . . . .   8
-     8.1.  Collection  . . . . . . . . . . . . . . . . . . . . . . .   8
-       8.1.1.  RETRIEVE  . . . . . . . . . . . . . . . . . . . . . .   8
-       8.1.2.  CREATE  . . . . . . . . . . . . . . . . . . . . . . .   8
+     6.1.  Example Serialization Formats . . . . . . . . . . . . . .   7
+   7.  URI and Parameter Processing  . . . . . . . . . . . . . . . .   8
+     7.1.  URI Path Processing . . . . . . . . . . . . . . . . . . .   8
+     7.2.  URI Parameter processing  . . . . . . . . . . . . . . . .   9
+       7.2.1.  Resource selection  . . . . . . . . . . . . . . . . .   9
+   8.  Transfer Model Mapping  . . . . . . . . . . . . . . . . . . .   9
+     8.1.  Collection  . . . . . . . . . . . . . . . . . . . . . . .   9
+       8.1.1.  RETRIEVE  . . . . . . . . . . . . . . . . . . . . . .   9
+       8.1.2.  CREATE  . . . . . . . . . . . . . . . . . . . . . . .   9
        8.1.3.  UPDATE  . . . . . . . . . . . . . . . . . . . . . . .   9
        8.1.4.  DELETE  . . . . . . . . . . . . . . . . . . . . . . .   9
-     8.2.  Links . . . . . . . . . . . . . . . . . . . . . . . . . .   9
-       8.2.1.  RETRIEVE  . . . . . . . . . . . . . . . . . . . . . .   9
-       8.2.2.  CREATE  . . . . . . . . . . . . . . . . . . . . . . .   9
-       8.2.3.  UPDATE (including partial update) . . . . . . . . . .   9
-       8.2.4.  DELETE  . . . . . . . . . . . . . . . . . . . . . . .   9
-     8.3.  Items . . . . . . . . . . . . . . . . . . . . . . . . . .   9
+     8.2.  Links . . . . . . . . . . . . . . . . . . . . . . . . . .  10
+       8.2.1.  RETRIEVE  . . . . . . . . . . . . . . . . . . . . . .  10
+       8.2.2.  CREATE  . . . . . . . . . . . . . . . . . . . . . . .  10
+       8.2.3.  UPDATE (including partial update) . . . . . . . . . .  10
+       8.2.4.  DELETE  . . . . . . . . . . . . . . . . . . . . . . .  10
 
 
 
@@ -114,54 +114,54 @@ Koster                  Expires January 11, 2017                [Page 2]
 Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
 
 
-       8.3.1.  Link Embedding Items  . . . . . . . . . . . . . . . .   9
-       8.3.2.  RETRIEVE  . . . . . . . . . . . . . . . . . . . . . .   9
-       8.3.3.  UPDATE  . . . . . . . . . . . . . . . . . . . . . . .   9
-       8.3.4.  DELETE  . . . . . . . . . . . . . . . . . . . . . . .   9
+     8.3.  Items . . . . . . . . . . . . . . . . . . . . . . . . . .  10
+       8.3.1.  Link Embedding Items  . . . . . . . . . . . . . . . .  10
+       8.3.2.  RETRIEVE  . . . . . . . . . . . . . . . . . . . . . .  10
+       8.3.3.  UPDATE  . . . . . . . . . . . . . . . . . . . . . . .  10
+       8.3.4.  DELETE  . . . . . . . . . . . . . . . . . . . . . . .  10
+       8.3.5.  CREATE  . . . . . . . . . . . . . . . . . . . . . . .  10
      8.4.  Groups  . . . . . . . . . . . . . . . . . . . . . . . . .  10
-   9.  Link extensions . . . . . . . . . . . . . . . . . . . . . . .  10
-     9.1.  Forms . . . . . . . . . . . . . . . . . . . . . . . . . .  10
-     9.2.  Monitors  . . . . . . . . . . . . . . . . . . . . . . . .  10
-   10. Reserved Identifiers  . . . . . . . . . . . . . . . . . . . .  10
-     10.1.  Default CURIE  . . . . . . . . . . . . . . . . . . . . .  11
-     10.2.  URI Parameters . . . . . . . . . . . . . . . . . . . . .  11
-     10.3.  Link Keywords  . . . . . . . . . . . . . . . . . . . . .  11
-       10.3.1.  Link Relation Types  . . . . . . . . . . . . . . . .  12
-       10.3.2.  Link Attribute Types . . . . . . . . . . . . . . . .  12
-     10.4.  Item Keywords  . . . . . . . . . . . . . . . . . . . . .  13
-     10.5.  Link Parameters used in Forms  . . . . . . . . . . . . .  13
-     10.6.  Link Parameters used in Monitors . . . . . . . . . . . .  14
-     10.7.  Conditional Observe Parameters used in Monitor links . .  15
-   11. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  16
-     11.1.  New Media Types for IANA Media Type registry . . . . . .  16
+   9.  Link extensions . . . . . . . . . . . . . . . . . . . . . . .  11
+     9.1.  Actions . . . . . . . . . . . . . . . . . . . . . . . . .  11
+     9.2.  Monitors  . . . . . . . . . . . . . . . . . . . . . . . .  11
+   10. Reserved Identifiers  . . . . . . . . . . . . . . . . . . . .  12
+     10.1.  Default CURIE  . . . . . . . . . . . . . . . . . . . . .  12
+     10.2.  URI Parameters . . . . . . . . . . . . . . . . . . . . .  12
+     10.3.  Link Keywords  . . . . . . . . . . . . . . . . . . . . .  13
+       10.3.1.  Link Relation Types  . . . . . . . . . . . . . . . .  13
+       10.3.2.  Link Attribute Types . . . . . . . . . . . . . . . .  14
+     10.4.  Item Keywords  . . . . . . . . . . . . . . . . . . . . .  14
+     10.5.  Link Parameters used in Actions  . . . . . . . . . . . .  15
+     10.6.  Link Parameters used in Monitors . . . . . . . . . . . .  16
+     10.7.  Conditional Observe Parameters used in Monitor links . .  16
+   11. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  17
+     11.1.  New Media Types for IANA Media Type registry . . . . . .  17
      11.2.  New Content Formats for the IANA CoRE Parameters
-            Registry . . . . . . . . . . . . . . . . . . . . . . . .  16
-     11.3.  New Link Parameters  . . . . . . . . . . . . . . . . . .  17
-     11.4.  New Link Relation Types (rel=) . . . . . . . . . . . . .  17
+            Registry . . . . . . . . . . . . . . . . . . . . . . . .  18
+     11.3.  New Link Parameters  . . . . . . . . . . . . . . . . . .  18
+     11.4.  New Link Relation Types (rel=) . . . . . . . . . . . . .  19
      11.5.  New Interface types (if=) for the IANA CoRE Parameters
-            Registry . . . . . . . . . . . . . . . . . . . . . . . .  17
-   12. Security Considerations . . . . . . . . . . . . . . . . . . .  18
-     12.1.  Object Signing . . . . . . . . . . . . . . . . . . . . .  18
-     12.2.  Signed Embedded Time Stamps  . . . . . . . . . . . . . .  18
-     12.3.  Signed Embedded Access Control . . . . . . . . . . . . .  18
-     12.4.  Secure State Updates . . . . . . . . . . . . . . . . . .  18
-     12.5.  Object Signing and Encryption  . . . . . . . . . . . . .  18
-   13. Design Patterns . . . . . . . . . . . . . . . . . . . . . . .  18
-     13.1.  RESTful Actuation using collections  . . . . . . . . . .  18
-     13.2.  RESTful Events and Alerts using collections  . . . . . .  18
-   14. Informative References  . . . . . . . . . . . . . . . . . . .  18
-   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  20
+            Registry . . . . . . . . . . . . . . . . . . . . . . . .  19
+   12. Security Considerations . . . . . . . . . . . . . . . . . . .  19
+     12.1.  Object Signing . . . . . . . . . . . . . . . . . . . . .  19
+     12.2.  Signed Embedded Time Stamps  . . . . . . . . . . . . . .  19
+     12.3.  Signed Embedded Access Control . . . . . . . . . . . . .  19
+     12.4.  Secure State Updates . . . . . . . . . . . . . . . . . .  19
+     12.5.  Object Signing and Encryption  . . . . . . . . . . . . .  19
+   13. Design Patterns . . . . . . . . . . . . . . . . . . . . . . .  20
+     13.1.  RESTful Actuation using collections  . . . . . . . . . .  20
+     13.2.  RESTful Events and Alerts using collections  . . . . . .  20
+   14. Informative References  . . . . . . . . . . . . . . . . . . .  20
+   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  21
 
 1.  Scope of this document
 
    This is a broadly scoped document which specifies representation
    formats, data models, interaction models, transfer mapping, URI
-   processing, and some extensions including forms and bindings.
+   processing, and some extensions including actions and bindings.
 
    The features listed above and new features may be specified and
    extended as needed in other documents which refer to this document.
-
-
 
 
 
@@ -215,7 +215,7 @@ Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
 3.2.  Links
 
    Links follow the specifications in [RFC5988] and [RFC6690] with
-   extensions to implement forms and bindings as described in this
+   extensions to implement actions and monitors as described in this
    document and any referencing extension documents.
 
 
@@ -301,21 +301,22 @@ Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
 
 5.1.  Base element
 
-   A base element describe the context under which to interpret values
-   in items within the representation of a colection.
+   A base element describes the context under which to interpret values
+   in items within the representation of a collection.
 
-   The base name element (bn) indicates the base URI or an absolute
+   The base name value (bn) indicates the base URI or an absolute
    reference from which to base relative references found in the links.
    It functions as an embedded base URI reference as per [RFC3986]
    Section 5.1.1
 
    The format of the base elements are specified in
-   [I-D.ietf-core-senml].  Figure 1 is an example of a base name
-   element.
+   [I-D.ietf-core-senml].  Figure 1 is an example of a base element.
 
-       "bn": "/dev/sen/temp/"
+       {
+         "bn": "/dev/sen/"
+       }
 
-                     Figure 1: SenML Base Name Example
+                      Figure 1: Example Base Element
 
    Other base items from SenML are permissible, including base time (bt)
    and base value(bv).  If additional senml base element are present,
@@ -325,10 +326,9 @@ Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
    collection MUST be added to the base value as per
    [I-D.ietf-core-senml].
 
-5.2.  Link element
 
-   A link element is a hyperlinks based on the structure and syntax of
-   [RFC6690].  An example of link elements
+
+
 
 
 
@@ -338,30 +338,77 @@ Koster                  Expires January 11, 2017                [Page 6]
 Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
 
 
+5.2.  Link element
+
+   A link element is a hyperlink based on the structure and syntax of
+   [RFC6690] and [I-D.ietf-core-links-json].  An example link element is
+   shown in Figure 2.
+
+       {
+         "href": "temp",
+         "rt": "some.sensor"
+       }
+
+                      Figure 2: Example Link Element
+
 5.3.  Item element
 
    An item element in a collection is a data element that is referenced
-   by a URI in the collection.  THe URI reference to an item in a
-   collection must use the collection URI as context or specify a link
-   anchor property to override the default context.
+   by a link in the collection.
+
+   Items in the collection are indicated by a references (href) that
+   serve as a selection variables for matching to URI parameters and
+   resource names in multi-resource representataions.  Reference
+   resolution should use the rules defined in [RFC3986].
 
    Items may be embedded in the collection, they may be subresources of
    the collection, or they may be items in other collections referenced
-   by links in the collection.
+   by links in the collection.  An example item element is shown in
+   Figure 3
 
-   Items in the collection must be indicated by a relative references
-   (href) that serve as a selection variables for matching to URI
-   parameters and resource names in multi-resource representataions.
+       {
+         "n": "temp",
+         "v": "77"
+       }
+
+                      Figure 3: Example Item Element
 
 6.  Representation Formats
 
-   Example Serialization Formats {#example-formats} Figure 2 shows an
-   example document in hsml+json format
+6.1.  Example Serialization Formats
 
-   {
-   }
+   Figure 4 shows an example document in hsml+json format.  This example
+   contains a base element, a link element, and an item element.
 
-                  Figure 2: application/hsml+json Example
+
+
+
+
+
+
+
+
+
+Koster                  Expires January 11, 2017                [Page 7]
+
+Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
+
+
+       [
+         {
+           "bn": "/dev/sen/"
+         },
+         {
+           "href": "temp",
+           "rt": "some.sensor"
+         },
+         {
+           "n": "temp",
+           "v": "77"
+         }
+       ]
+
+                  Figure 4: application/hsml+json Example
 
 7.  URI and Parameter Processing
 
@@ -386,14 +433,6 @@ Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
    References to items in a collection should not contain the trailing
    "/" character.  Servers should return item references that do not
    contain the trailing "/" character, and should should attempt to
-
-
-
-Koster                  Expires January 11, 2017                [Page 7]
-
-Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
-
-
    accept references to items in collections with the trailing "/" if
    such references can be used to construct unambiguous references.
 
@@ -403,6 +442,14 @@ Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
 
    URI references may alternatively be routed as opaque strings to
    resources.  In this case, the resolution of relative references to
+
+
+
+Koster                  Expires January 11, 2017                [Page 8]
+
+Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
+
+
    items in a collection should be possible by concatenating the
    relative reference to the context URI of the collection.  Note that
    this may enforce certain naming conventions such as the trailing
@@ -434,21 +481,11 @@ Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
 
 8.1.1.  RETRIEVE
 
-   List Collection Links and Items
+   List Collection Elements
 
 8.1.2.  CREATE
 
-   Add Items and Links
-
-
-
-
-
-
-Koster                  Expires January 11, 2017                [Page 8]
-
-Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
-
+   Add Elements to Collection
 
 8.1.3.  UPDATE
 
@@ -457,6 +494,17 @@ Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
 8.1.4.  DELETE
 
    Remove Entire Collection
+
+
+
+
+
+
+
+Koster                  Expires January 11, 2017                [Page 9]
+
+Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
+
 
 8.2.  Links
 
@@ -496,20 +544,23 @@ Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
 
    Remove Items
 
+8.3.5.  CREATE
 
-
-
-
-
-Koster                  Expires January 11, 2017                [Page 9]
-
-Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
-
+   Create Items with default links
 
 8.4.  Groups
 
    Group transfer operations are provided by collections that contain
    links with the "grp" relation value.
+
+
+
+
+
+Koster                  Expires January 11, 2017               [Page 10]
+
+Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
+
 
    Transfer operations which specify the collection URI as target are
    sent to the resolved URI of each link in the collection that contains
@@ -530,11 +581,26 @@ Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
 
 9.  Link extensions
 
-9.1.  Forms
+9.1.  Actions
 
-   Forms are hypermedia controls used to construct transfer operations
-   that change the state of resources.  The vocabulary and semantics
-   roughly follows the use of forms in HTML [RFC1866].
+   Actions are hypermedia controls used to construct transfer operations
+   that change the state of resources.  The use roughly follows the use
+   of forms in HTML [RFC1866], with semantics more consistent with
+   links.
+
+   An example action element is shown in Figure 5
+
+       {
+         "rel": "action"
+         "type": "st.on"
+         "href": "commands",
+         "rt": "st.command",
+         "method": "create",
+         "accept": "text/plain",
+         "schema": {"value": "on"}
+       }
+
+                     Figure 5: Example action Element
 
 9.2.  Monitors
 
@@ -542,6 +608,28 @@ Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
    operations that expose state changes of resources.  A monitor invokes
    an outbound transfer operation on a target resource.  Monitors use
    the IANA registered link relation "monitor", defined in [RFC5989].
+
+   An example item element is shown in Figure 6
+
+
+
+Koster                  Expires January 11, 2017               [Page 11]
+
+Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
+
+
+       {
+         "rel": "monitor",
+         "href": "tank-level-events",
+         "content-type": "application/senml+json",
+         "target-method": "create",
+         "pmin": 600,
+         "pmax": 3600,
+         "nbul": 80,
+         "nbll": 20
+       }
+
+                     Figure 6: Example Monitor Element
 
 10.  Reserved Identifiers
 
@@ -554,14 +642,6 @@ Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
 
    Many of the keywords listed are defined in other RFCs and IETF
    documents.  This document does not redefine any existing keywords.
-
-
-
-Koster                  Expires January 11, 2017               [Page 10]
-
-Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
-
-
    Where a definition exists, the existing definition will be used.
    Where multiple conflicting definitions exist, this document will
    indicate the required definition.
@@ -587,6 +667,13 @@ Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
    according to specific processing rules and should not be used to
    attempt to match link parameters.
 
+
+
+Koster                  Expires January 11, 2017               [Page 12]
+
+Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
+
+
    "if"  Interface type, used to select a partial representation of a
       collection
 
@@ -610,14 +697,6 @@ Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
       link relation type as defined in [RFC5988] and [RFC6690]
 
    "href"
-
-
-
-Koster                  Expires January 11, 2017               [Page 11]
-
-Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
-
-
       target of a link reference.  This may be a relative reference in
       the collection e.g. "currentValue" or a local absolute reference
       "/sensors/temp/currentValue" or a full reference
@@ -635,13 +714,21 @@ Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
    "item"
       the link points to an item in the collection
 
-   "sub"
-      the link points to a subresource item of the collection
-
    "grp"
       the item the link points to is available for collective
       interaction through the collection URI according to group
       semantics described in {}
+
+
+
+
+
+
+
+Koster                  Expires January 11, 2017               [Page 13]
+
+Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
+
 
 10.3.2.  Link Attribute Types
 
@@ -663,16 +750,6 @@ Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
    "obs"
       presence of this attribute indicates that the associated resource
       is observable
-
-
-
-
-
-
-Koster                  Expires January 11, 2017               [Page 12]
-
-Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
-
 
 10.4.  Item Keywords
 
@@ -702,6 +779,13 @@ Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
    "v"
       number value
 
+
+
+Koster                  Expires January 11, 2017               [Page 14]
+
+Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
+
+
    "vb"
       boolean value
 
@@ -712,26 +796,18 @@ Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
    "vs"
       string value
 
-10.5.  Link Parameters used in Forms
+10.5.  Link Parameters used in Actions
 
    "anchor"
-      May override the default context of a form and store it in a
+      May override the default context of an action and store it in a
       different location from the subject resource
 
    "rel"
-      Indicates that this control is a form; MUST contain the value
+      Indicates that this control is an action; MUST contain the value
       "action"
 
-
-
-
-Koster                  Expires January 11, 2017               [Page 13]
-
-Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
-
-
    "href"
-      URI for mapping the action specified in the form
+      URI for mapping the action specified in the action
 
    "type"
       Additional indicator of the action being exposed, can be used with
@@ -754,6 +830,17 @@ Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
       Indicates the schema to use for constructing or interpreting
       transfer payloads, may be a literal value or a URI pointing to an
       instance of a schema
+
+
+
+
+
+
+
+Koster                  Expires January 11, 2017               [Page 15]
+
+Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
+
 
 10.6.  Link Parameters used in Monitors
 
@@ -779,13 +866,6 @@ Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
    "ct"
       the CoAP content-format number to use in the transfer operation
 
-
-
-Koster                  Expires January 11, 2017               [Page 14]
-
-Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
-
-
    "accept-method"
       Transfer method to use in request from the observed resource,
       default is OBSERVE
@@ -810,6 +890,14 @@ Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
    "pmax"
       Maximum time between notifications from a binding
 
+
+
+
+Koster                  Expires January 11, 2017               [Page 16]
+
+Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
+
+
    "gt"
       value to match or exceed to determine notification condition
 
@@ -832,15 +920,6 @@ Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
 
    "init"
       Starts the notification state machine with an initial value
-
-
-
-
-
-Koster                  Expires January 11, 2017               [Page 15]
-
-Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
-
 
 11.  IANA Considerations
 
@@ -868,6 +947,13 @@ Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
 
    o  application/hsml.link
 
+
+
+Koster                  Expires January 11, 2017               [Page 17]
+
+Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
+
+
    o  application/hsml.item
 
    o  application/hsml+json
@@ -887,16 +973,6 @@ Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
    o  22001 - application/hsml.link+json
 
    o  22002 - application/hsml.item+json
-
-
-
-
-
-
-Koster                  Expires January 11, 2017               [Page 16]
-
-Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
-
 
 11.3.  New Link Parameters
 
@@ -927,11 +1003,16 @@ Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
 
    o  st
 
+
+
+Koster                  Expires January 11, 2017               [Page 18]
+
+Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
+
+
    o  eq
 
 11.4.  New Link Relation Types (rel=)
-
-   o  sub
 
    o  grp
 
@@ -942,17 +1023,6 @@ Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
    o  hsml.item
 
    o  hsml.link
-
-
-
-
-
-
-
-Koster                  Expires January 11, 2017               [Page 17]
-
-Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
-
 
 12.  Security Considerations
 
@@ -987,6 +1057,15 @@ Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
    IETF documents for secure JSON Objects [RFC7516] and CBOR Objects
    [I-D.ietf-cose-msg].
 
+
+
+
+
+Koster                  Expires January 11, 2017               [Page 19]
+
+Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
+
+
 13.  Design Patterns
 
 13.1.  RESTful Actuation using collections
@@ -1000,15 +1079,6 @@ Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
               Resource Linking for Constrained RESTful Environments",
               draft-groves-core-dynlink-00 (work in progress), July
               2016.
-
-
-
-
-
-Koster                  Expires January 11, 2017               [Page 18]
-
-Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
-
 
    [I-D.ietf-core-interfaces]
               Shelby, Z., Vial, M., Koster, M., and C. Groves, "Reusable
@@ -1045,6 +1115,13 @@ Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
               Language - 2.0", RFC 1866, DOI 10.17487/RFC1866, November
               1995, <http://www.rfc-editor.org/info/rfc1866>.
 
+
+
+Koster                  Expires January 11, 2017               [Page 20]
+
+Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
+
+
    [RFC3986]  Berners-Lee, T., Fielding, R., and L. Masinter, "Uniform
               Resource Identifier (URI): Generic Syntax", STD 66,
               RFC 3986, DOI 10.17487/RFC3986, January 2005,
@@ -1057,14 +1134,6 @@ Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
    [RFC5989]  Roach, A., "A SIP Event Package for Subscribing to Changes
               to an HTTP Resource", RFC 5989, DOI 10.17487/RFC5989,
               October 2010, <http://www.rfc-editor.org/info/rfc5989>.
-
-
-
-
-Koster                  Expires January 11, 2017               [Page 19]
-
-Internet-Draft   Media Types for Hypertext Sensor Markup       July 2016
-
 
    [RFC6690]  Shelby, Z., "Constrained RESTful Environments (CoRE) Link
               Format", RFC 6690, DOI 10.17487/RFC6690, August 2012,
@@ -1104,17 +1173,4 @@ Author's Address
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-Koster                  Expires January 11, 2017               [Page 20]
+Koster                  Expires January 11, 2017               [Page 21]
