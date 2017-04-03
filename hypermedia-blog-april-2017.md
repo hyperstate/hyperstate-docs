@@ -2,9 +2,9 @@
 
 ## Introduction
 
-In the last two articles, I discussed some design issues and patterns in hypermedia controls for machine interfaces, and presented an experimental open source software platform and demonstrator for an example hypermedia system.
+The last two articles discussed some design issues and patterns in hypermedia controls for machine interfaces, and presented an experimental open source software platform and demonstrator for an example hypermedia system.
 
-In this article, I would like to summarize the progress on this topic over the last year and focus on the subject of asynchronous and realtime interactions using REST design principles and, in particular, hypermedia controls.
+This article will summarize the progress on this topic over the last year and focus on the subject of asynchronous and realtime interactions using REST design principles and, in particular, hypermedia controls.
 
 ## HSML: Machine Hypermedia Content Formats
 
@@ -70,13 +70,13 @@ For example, an actuator may take some time to complete its action, like closing
 
 A meta-model using the concept of an "action" is presented in the HSML draft. An Action describes and accepts a representation for a desired state change to a resource. The conceptual model is that the desired state change is "created" in the context of an Action resource, which then affects the state of the linked resource(s), and which can then be monitored for its eventual outcome.
 
-An Action link works in analogous fashion to a form in HTML; it dscribes what the action is expected to accomplish, like "turn on the light" or "add a post to the blog", and includes information on how to accomplish the action, like what method to use, which resource type, which content format, schema information to describe the payload, and descriptions of expected responses.
+An Action link is indicated by the value of "rel" including "action", and works in analogous fashion to a form in HTML; it describes what the action is expected to accomplish, like "turn on the light" or "add a post to the blog", and includes information on how to accomplish the action, like what method to use, which resource type, which content format, schema information to describe the payload, and descriptions of expected responses.
 
 Action links can describe simple action operations that use REST state updates, or more complex actions which create representations of abstract action descriptions in collections of action instances. Such collections may be used to sequence submitted actions in FIFO or priority order, and for clients to track long running or pending actions which have not yet completed.
 
 Actions may be performed directly on resources they are intended to update the state of, or they may be performed on proxy resources, as in the likely example of action instances crreated in a collection.
 
-In the case that Actions are performed on a proxy resource, the resource may be indicated in the context of the affected resource(s) by including a link with the relation type "alternate" and with a resource type indicating "action".
+In the case that Actions are performed on a proxy resource, the resource may be indicated in the context of the affected resource(s) by including a link with the relation type including the value "alternate" and with a resource type indicating the type of action.
 
 
 ### Link Bindings
@@ -98,6 +98,8 @@ Link bindings may be defined with separate source and destination controls for t
 Link bindings may have different source and destination schemes, enabling link bindings to be used to convert protocols. For example, updates to a REST resource may be published to an MQTT broker using a link binding. Since the content format and other resource information can be obtained using HTTP, there is less need to augment the MQTT system with meta-data when used in this way.
 
 For schemes that don't offer subscribe or observe, for example HTTP, RESThooks can be created and used in a structured way. Similarly, for systems using MQTT subscribe or CoAP Observe, link bindings enable the orchestration and inspection of dynamic resource interactions using graph techniques and tools.
+
+Link bindings provide a means for conditional notification, using parameters to control the time period and value/change threshold for notification messages to be generated.
 
 An extension to link bindings may be created which enables a link binding to consume a hypermedia action. This would enable cross-protocol adaptation without proxies, by using dynamic adaptation code in the libraries that consume the hypermedia controls.
 
@@ -257,9 +259,56 @@ GET /example/light/moveto/77f3ac66
 
 ### Link bindings used to monitor resource state using REST callback 
 
+Perhaps the simplest case of a link binding involves monitoring the state of a resource and sending changes to a client using PUT to a REST API endpoint. This is often called a "web callback" pattern.
+
+The resource being monitored is the source of updates and is the context of the "monitor" link binding, and the target is the destination resource, in this example the callback URI.
+
+The link binding would look like this:
+
+    [
+      {
+        "anchor": "/example/temperature/value",
+        "rel": "monitor",
+        "href": "https://example.com:1880/my-callback-uri"
+      }
+    ]
+
+Whenever the local resource at /example/temperature/value is updated, the representation of the resource will be pushed to the URI https://example.com:1880/my-callback-uri
+
+By default, the source would use Observe or a REST hook and the destination (transfer method) would use update, by default PUT.
+
 ### Using pubsub communication with REST
 
+Link bindings can specify the source and target to be differnet protocols. For example, changes to the temperaure value could be published to an MQTT broker.
+
+    [
+      {
+        "anchor": "/example/temperature/value",
+        "rel": "monitor",
+        "href": "mqtt://example.com:1883/example-topic",
+        "pmin": 10,
+        "pmax": 600,
+        "st": 1
+      }
+    ]
+
+The broker could be a reachable service in the cloud, and the temperature sensor could be in a sleepy device behind a NAT firewall, or in a mobile phone.
+
+In this example, the conditional notification parameters indicate that the representation of the resource will be published when the value changes by 1 unit or more from the most recent publication, will be published no more frequently than once every 10 seconds no matter what the change, and will be published at least once every 600 seconds even if no change occurs.
+
 ### Device-to-device orchestration using link Bindings
+
+Link bindings may be used to orchestrate asynchronous updates from one device to another.
+
+For example, an on-off switch could be push updates to a controlled device upon changes of state.
+
+    [
+      {
+        "anchor": "/switch/onoff/value",
+        "rel": "monitor",
+        "href": "coap://[fdfd::9]/light/onoff/value"
+      }
+    ]
 
 
 ## References
