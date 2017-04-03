@@ -118,6 +118,7 @@ The client would perform a link query to discover a moveto action and verify tha
 In this example, the client is looking for a brightness control with a "moveto" action type
 
 GET /example/light?if=core.ll
+
     [
       {
         "href": "brightness",
@@ -141,6 +142,7 @@ The resource at /example/light/moveto is an alternate resource for the collectio
 Seeing the readable parameter interface on the brightness, the client could check the units and adapt if needed.
 
 GET /example/light/brightness?if=core.ll
+
     [
       {
          "href": "targetbrightness",
@@ -156,6 +158,7 @@ GET /example/light/brightness?if=core.ll
      ]
 
 GET /example/light/brightness/targetbrightness?if=core.rp
+
      [
        {
          "n": "targetbrightness", 
@@ -167,6 +170,7 @@ GET /example/light/brightness/targetbrightness?if=core.rp
      ]
   
 GET /example/light/brightness/ramptime?if=core.rp
+
      [
        {
          "n": "targetbrightness", 
@@ -180,6 +184,7 @@ GET /example/light/brightness/ramptime?if=core.rp
 The client knows how to invoke the action at this point:
 
 POST /example/light/moveto?if=core.b
+
      [
        {
          "n": "targetbrightness", 
@@ -198,6 +203,7 @@ location: "77f3ac66"
 The client knows that the location can be monitored for status of the action instance that was created.
 
 GET /example/light/moveto/77f3ac66
+
      [
        {
          "n": "targetbrightness", 
