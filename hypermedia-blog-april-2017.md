@@ -119,23 +119,23 @@ In this example, the client is looking for a brightness control with a "moveto" 
 
 GET /example/light?if=core.ll
 
-[
-  {
-    "href": "brightness",
-    "rt": "urn:example:brightness",
-    "content-format": 50,
-    "if": [core.ll]
-  },
-  {
-    "anchor": "brightness",
-    "href": "moveto",
-    "rel": ["alternate", "action"],
-    "rt": "urn:example:moveto",
-    "method": "create",
-    "accept": 50,
-    "if": ["core.b"]
-  }
-]
+    [
+      {
+        "href": "brightness",
+        "rt": "urn:example:brightness",
+        "content-format": 50,
+        "if": [core.ll]
+      },
+      {
+        "anchor": "brightness",
+        "href": "moveto",
+        "rel": ["alternate", "action"],
+        "rt": "urn:example:moveto",
+        "method": "create",
+        "accept": 50,
+        "if": ["core.b"]
+      }
+    ]
 
 The resource at /example/light/moveto is an alternate resource for the collection at /example/light/brightness and offers action capability. The resource type (rt) is "moveto" which for action resources indicates the type of action.
 
