@@ -2,15 +2,37 @@
 
 ## Introduction
 
-In the last two articles, I discussed some design issues and patterns in hypermedia controls for machine interfaces, and presented an experimantal open source software platform and demonstrator for an example hypermedia system.
+In the last two articles, I discussed some design issues and patterns in hypermedia controls for machine interfaces, and presented an experimental open source software platform and demonstrator for an example hypermedia system.
 
 In this article, I would like to summarize the progress on this topic over the last year and focus on the subject of asynchronous and realtime interactions using REST design principles and, in particular, hypermedia controls.
 
-To set the background for this discussion, I would like to take a look at REST system design in the context of state machine design.
+## HSML: Machine Hypermedia Content Formats
 
-In REST system design, a distributed system is represented as a state transition graph. The nodes of the graphs represent states of the system, and the arcs of the graph represent possible state transitions. [example]
+Since the last article, there is a new Internet Draft describing a content format for hypermedia collections on constrained networks. HSML is a simple representation and interaction model for collections and associated links, forms, and items, using CoRE Link-Format and SenML.
+
+https://datatracker.ietf.org/doc/draft-koster-t2trg-hsml/
+
+### Content Format
+
+HSML is an updated version of the content format described in the earlier articles, and is kept aligned with the current versions of SenML and CoRE Link-Format. 
+
+HSML representations include CoRE Link-Format and SenML, with some extensions to the Link-Format and SenML keyword vocabularies. In addition, there is a format which includes both Link-Format and SenML elements, to facilitate interactions with items and their link parameters in a collection atomically.
+
+HSML provides for use of the Interface Type parameter (if) in links and request parameters, and is used to select representations of a resource as defined in CoRE Interfaces.
+
+### Common Transfer Layer
+
+The HSML draft discusses a common abstract transfer layer using CRUD + Observe/Notify, also known as CRUD+N, which is used to map various concrete protocols, including HTTP, CoAP, and MQTT. 
+
+This supports a common model for resource state interaction, upon which a consistent hypermedia interaction model may be constructed, and from there be extended.
 
 ## CRUD, REST, and Hypermedia
+
+To set the background for this discussion, I would like to take a look at REST system design in the context of state machine design.
+
+In REST system design, a distributed system is represented as a state transition graph. The nodes of the graphs represent states of the system, and the arcs of the graph represent possible state transitions. 
+
+[example]
 
 The common resource design pattern known as CRUD exposes the system state contained in the nodes of the graph. Resource state may be Created, Retrieved, Updated, or Deleted.
 
@@ -29,20 +51,6 @@ Hypermedia controls describe possible state transitions based on the current sta
 In the last article, a class of hypermedia controls was described that facilitates asynchronous and realtime interaction between hypermedia clients and REST servers. These belong to a general class of Reactive Hypermedia controls, that can direct the transfer and processing of dynamically changing data and asynchronous events.
 
 This article describes two types of this class of Reactive Hypermedia controls, Actions and Link Bindings, in more depth, with examples and terminology consistent with the HSML Internet Draft published in the IRTF Thing to Thing research group (T2TRG):
-
-## HSML: Machine Hypermedia Content Formats
-
-Since the last article, there is a new Internet Draft describing a content format for hypermedia collections on constrained networks. HSML is a simple representation and interaction model for collections and associated links, forms, and items, using CoRE Link-Format and SenML.
-
-https://datatracker.ietf.org/doc/draft-koster-t2trg-hsml/
-
-### Common Transfer Layer
-
-The HSML draft discusses a common abstract transfer layer using CRUD + Observe/Notify, also known as CRUD+N, which is used to map various concrete protocols, including HTTP, CoAP, and MQTT. 
-
-This supports a common model for resource state interaction, upon which a consistent hypermedia interaction model may be constructed, and from there be extended.
-
-## Asynchronous Interaction 
 
 ### Problem statement and scope
 
@@ -93,7 +101,7 @@ For schemes that don't offer subscribe or observe, for example HTTP, RESThooks c
 
 An extension to link bindings may be created which enables a link binding to consume a hypermedia action. This would enable cross-protocol adaptation without proxies, by using dynamic adaptation code in the libraries that consume the hypermedia controls.
 
-## System architecture
+## System architecture examples
 
 Reactive hypermedia controls enable the dynamic orchestration of client-server interactions by discovering actions and adding dynamic link bindings to connect resources, event sources, and event handlers. The following are some examples of system-level orchestration using reactive hypermedia.
 
@@ -117,18 +125,25 @@ The client would perform a link query to discover a moveto action and verify tha
 
 In this example, the client is looking for a brightness control with a "moveto" action type
 
-GET /example/light?if=core.ll
+GET /example/light/?if=core.ll
 
     [
       {
-        "href": "brightness",
-        "rt": "urn:example:brightness",
+        "href": "",
+        "rel": "self",
+        "rt": "urn:example:luminaire",
         "content-format": 50,
-        "if": [core.ll]
+        "if": "core.ll"
       },
       {
-        "anchor": "brightness",
-        "href": "moveto",
+        "href": "brightness/",
+        "rt": "urn:example:brightness",
+        "content-format": 50,
+        "if": ["core.ll", "core.b"]
+      },
+      {
+        "anchor": "brightness/",
+        "href": "moveto/",
         "rel": ["alternate", "action"],
         "rt": "urn:example:moveto",
         "method": "create",
@@ -141,31 +156,47 @@ The resource at /example/light/moveto is an alternate resource for the collectio
 
 Seeing the readable parameter interface on the brightness, the client could check the units and adapt if needed.
 
-GET /example/light/brightness?if=core.ll
+GET /example/light/brightness/?if=core.ll
 
     [
       {
-         "href": "targetbrightness",
-         "rt": "urn:example:targetvalue",
+        "href": "",
+        "rel": "self",
+        "rt": "urn:example:brightness",
+        "content-format": 50,
+        "if": ["core.ll", "core.b"]
+      },
+      {
+         "href": "value",
+         "rt": "urn:example:value",
          "content-format": 50,
-         "if": [core.rp]
+         "if": "core.rp"
+       },
        {
          "href": "ramptime",
          "rt": "urn:example:ramptime",
          "content-format": 50,
-         "if": [core.rp]
+         "if": "core.rp"
+       },
+       {
+        "href": "moveto/",
+        "rel": ["alternate", "action"],
+        "rt": "urn:example:moveto",
+        "method": "create",
+        "accept": 50,
+        "if": ["core.b"]
        }
      ]
 
-GET /example/light/brightness/targetbrightness?if=core.rp
+GET /example/light/brightness/value?if=core.rp
 
      [
        {
-         "n": "targetbrightness", 
+         "n": "value", 
          "u": "%", 
-         "min": 0, 
-         "max": 100, 
-         "res": 0.1
+         "vmin": 0, 
+         "vmax": 100, 
+         "vres": 0.1
        }
      ]
   
@@ -173,21 +204,21 @@ GET /example/light/brightness/ramptime?if=core.rp
 
      [
        {
-         "n": "targetbrightness", 
-         "u": "%", 
-         "min": 0, 
-         "max": 100, 
-         "res": 0.1
+         "n": "ramptime", 
+         "u": "s", 
+         "vmin": 0, 
+         "vmax": 100, 
+         "vres": 0.1
        }
      ]
 
 The client knows how to invoke the action at this point:
 
-POST /example/light/moveto?if=core.b
+POST /example/light/brightness/moveto/?if=core.b
 
      [
        {
-         "n": "targetbrightness", 
+         "n": "value", 
          "v": 77
        },
        {
@@ -200,13 +231,13 @@ Response:
 2.04 CREATED
 location: "77f3ac66"
 
-The client knows that the location can be monitored for status of the action instance that was created.
+The client knows that the location can be monitored for changes in the status of the action instance that was created.
 
 GET /example/light/moveto/77f3ac66
 
      [
        {
-         "n": "targetbrightness", 
+         "n": "value", 
          "v": 77
        },
        {
@@ -224,7 +255,7 @@ GET /example/light/moveto/77f3ac66
      ]
 
 
-### Link bindings to monitor server state using REST callback 
+### Link bindings used to monitor resource state using REST callback 
 
 ### Using pubsub communication with REST
 
