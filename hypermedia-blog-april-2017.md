@@ -118,7 +118,6 @@ The client would perform a link query to discover a moveto action and verify tha
 In this example, the client is looking for a brightness control with a "moveto" action type
 
 GET /example/light?if=core.ll
-
     [
       {
         "href": "brightness",
@@ -142,86 +141,81 @@ The resource at /example/light/moveto is an alternate resource for the collectio
 Seeing the readable parameter interface on the brightness, the client could check the units and adapt if needed.
 
 GET /example/light/brightness?if=core.ll
-[
-  {
-    "href": "targetbrightness",
-    "rt": "urn:example:targetvalue",
-    "content-format": 50,
-    "if": [core.rp]
-  },
-  {
-    "href": "ramptime",
-    "rt": "urn:example:ramptime",
-    "content-format": 50,
-    "if": [core.rp]
-  }
-]
+    [
+      {
+         "href": "targetbrightness",
+         "rt": "urn:example:targetvalue",
+         "content-format": 50,
+         "if": [core.rp]
+       {
+         "href": "ramptime",
+         "rt": "urn:example:ramptime",
+         "content-format": 50,
+         "if": [core.rp]
+       }
+     ]
 
 GET /example/light/brightness/targetbrightness?if=core.rp
-[
-  {
-    "n": "targetbrightness", 
-    "u": "%", 
-    "min": 0, 
-    "max": 100, 
-    "res": 0.1
-  }
-]
+     [
+       {
+         "n": "targetbrightness", 
+         "u": "%", 
+         "min": 0, 
+         "max": 100, 
+         "res": 0.1
+       }
+     ]
   
 GET /example/light/brightness/ramptime?if=core.rp
-[
-  {
-    "n": "targetbrightness", 
-    "u": "%", 
-    "min": 0, 
-    "max": 100, 
-    "res": 0.1
-  }
-]
+     [
+       {
+         "n": "targetbrightness", 
+         "u": "%", 
+         "min": 0, 
+         "max": 100, 
+         "res": 0.1
+       }
+     ]
 
 The client knows how to invoke the action at this point:
 
 POST /example/light/moveto?if=core.b
-
-[
-  {
-    "n": "targetbrightness", 
-    "v": 77
-  },
-  {
-    "n": "ramptime", 
-    "v": 10
-  }
-]
+     [
+       {
+         "n": "targetbrightness", 
+         "v": 77
+       },
+       {
+         "n": "ramptime", 
+         "v": 10
+       }
+     ]
 
 Response:
-
 2.04 CREATED
 location: "77f3ac66"
 
 The client knows that the location can be monitored for status of the action instance that was created.
 
 GET /example/light/moveto/77f3ac66
-
-[
-  {
-    "n": "targetbrightness", 
-    "v": 77
-  },
-  {
-    "n": "ramptime", 
-    "v": 10
-  },
-  {
-    "n": "status", 
-    "vs": "pending"
-  },
-  {
-    "n": "remainingtime", 
-    "v": 10
-  }
-]
-
+     [
+       {
+         "n": "targetbrightness", 
+         "v": 77
+       },
+       {
+         "n": "ramptime", 
+         "v": 10
+       },
+       {
+         "n": "status", 
+         "vs": "pending"
+       },
+       {
+         "n": "remainingtime", 
+         "v": 10
+       }
+     ]
 
 
 ### Link bindings to monitor server state using REST callback 
