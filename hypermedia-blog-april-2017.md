@@ -1,4 +1,4 @@
-### Reactive Hypermedia: Design Patterns for Asynchronous and Reactive Machine-to-Machine Interaction using Hypermedia Controls
+# Reactive Hypermedia: Design Patterns for Asynchronous and Reactive Machine-to-Machine Interaction using Hypermedia Controls
 
 ## Introduction
 
@@ -42,7 +42,9 @@ The HSML draft discusses a common abstract transfer layer using CRUD + Observe/N
 
 This supports a common model for resource state interaction, upon which a consistent hypermedia interaction model may be constructed, and from there be extended.
 
-## Asynchronous Interaction problem statement and scope
+## Asynchronous Interaction 
+
+### Problem statement and scope
 
 Asynchronous interaction over REST involves use cases for asynchronous state transfer in both directions; from client to server, and from server to client.
 
@@ -50,7 +52,7 @@ In the client to server case, the problem is in describing incoming state transi
 
 In the server to client case, the problem includes describing how to use asynchronous communication to communicate resource state changes outgoing, in real time, to clients in order to enable reactive client processing of server state changes and events.
 
-## Actions and Forms
+### Actions and Forms
 
 Incoming state transitions are state transitions that a client wishes to make on a resource, such as turning a power switch on or opening a garage door.
 
@@ -69,7 +71,7 @@ Actions may be performed directly on resources they are intended to update the s
 In the case that Actions are performed on a proxy resource, the resource may be indicated in the context of the affected resource(s) by including a link with the relation type "alternate" and with a resource type indicating "action".
 
 
-## Link Bindings
+### Link Bindings
 
 For outgoing state transitions, there is the additional problem of describing how a client is expected to asynchronously obtain the state transitions as they occur, perhaps with some additional QoS parameters specified as system constraints.
 
@@ -93,40 +95,42 @@ An extension to link bindings may be created which enables a link binding to con
 
 ## System architecture
 
-Actions in hypermedia clients
+Reactive hypermedia controls enable the dynamic orchestration of client-server interactions by discovering actions and adding dynamic link bindings to connect resources, event sources, and event handlers. The following are some examples of system-level orchestration using reactive hypermedia.
 
-Link bindings to monitor server state 
+### Actions in hypermedia clients
 
-using pubsub communication with REST
+### Link bindings to monitor server state using REST callback 
 
-Device-to-device orchestration using link Bindings
+### Using pubsub communication with REST
+
+### Device-to-device orchestration using link Bindings
 
 
-### References
+## References
 
-Roy Fielding's Reference Work on REST
+### Roy Fielding's Reference Work on REST
 https://www.ics.uci.edu/~fielding/pubs/dissertation/top.htm
 
-Roy Fielding's note on Hypertext and REST APIs
+### Roy Fielding's note on Hypertext and REST APIs
 http://roy.gbiv.com/untangled/2008/rest-apis-must-be-hypertext-driven
 
-T2TRG 
+### T2TRG 
 https://datatracker.ietf.org/rg/t2trg/charter/
 
-HSML
+### HSML
 https://datatracker.ietf.org/doc/draft-koster-t2trg-hsml/
 
-RFC 6690
+### RFC 6690
 https://tools.ietf.org/html/rfc6690
 
-CoRE SenML
+### CoRE SenML
 https://tools.ietf.org/html/draft-ietf-core-senml-05
 
-CoRE Dynlink
+### CoRE Dynlink
 https://tools.ietf.org/html/draft-ietf-core-dynlink-03
 
-Even Models for RESTful APIs
+### Even Models for RESTful APIs
 http://iot-datamodels.blogspot.com/2013/05/event-models-for-restful-apis.html
 
-REST to MQTT Bridge slides
+### REST to MQTT Bridge slides
 https://www.slideshare.net/michaeljohnkoster/mqtt-rest-bridge
