@@ -24,11 +24,11 @@ With hypermedia controls to dynamically describe state transitions, REST clients
 
 Hypermedia controls describe possible state transitions based on the current state of the system, rather than pre-determined by a static resource design.
 
-## Reactive Hypermedia
+## Reactive Hypermedia: Actions and Link Bindings
 
 In the last article, a class of hypermedia controls was described that facilitates asynchronous and realtime interaction between hypermedia clients and REST servers. These belong to a general class of Reactive Hypermedia controls, that can direct the transfer and processing of dynamically changing data and asynchronous events.
 
-This article describes this class of Reactive Hypermedia controls in more depth, with examples and terminology consistent with the HSML Internet Draft published in the IRTF Thing to Thing research group (T2TRG):
+This article describes two types of this class of Reactive Hypermedia controls, Actions and Link Bindings, in more depth, with examples and terminology consistent with the HSML Internet Draft published in the IRTF Thing to Thing research group (T2TRG):
 
 ## HSML: Machine Hypermedia Content Formats
 
@@ -59,6 +59,15 @@ For incoming state transitions, the problem is how to inform the client what tra
 For example, an actuator may take some time to complete its action, like closing a motorized gate or garage door. The outcome may be uncertain, as in the case of power interruptions or mechanical blockage of the gate. These conditions result in a number of possible eventual outcomes which need to be returned to the client for processing and client state update.
 
 A meta-model using the concept of an "action" is presented in the HSML draft. An Action describes and accepts a representation for a desired state change to a resource. The conceptual model is that the desired state change is "created" in the context of an Action resource, which then affects the state of the linked resource(s), and which can then be monitored for its eventual outcome.
+
+An Action link works in analogous fashion to a form in HTML; it dscribes what the action is expected to accomplish, like "turn on the light" or "add a post to the blog", and includes information on how to accomplish the action, like what method to use, which resource type, which content format, schema information to describe the payload, and descriptions of expected responses.
+
+Action links can describe simple action operations that use REST state updates, or more complex actions which create representations of abstract action descriptions in collections of action instances. Such collections may be used to sequence submitted actions in FIFO or priority order, and for clients to track long running or pending actions which have not yet completed.
+
+Actions may be performed directly on resources they are intended to update the state of, or they may be performed on proxy resources, as in the likely example of action instances crreated in a collection.
+
+In the case that Actions are performed on a proxy resource, the resource may be indicated in the context of the affected resource(s) by including a link with the relation type "alternate" and with a resource type indicating "action".
+
 
 ## Link Bindings
 
@@ -95,20 +104,29 @@ Device-to-device orchestration using link Bindings
 
 ### References
 
-Fielding REST
+Roy Fielding's Reference Work on REST
+https://www.ics.uci.edu/~fielding/pubs/dissertation/top.htm
 
-Fielding REST Note on hypermedia
+Roy Fielding's note on Hypertext and REST APIs
+http://roy.gbiv.com/untangled/2008/rest-apis-must-be-hypertext-driven
 
-T2TRG HSML
+T2TRG 
+https://datatracker.ietf.org/rg/t2trg/charter/
+
+HSML
+https://datatracker.ietf.org/doc/draft-koster-t2trg-hsml/
 
 RFC 6690
+https://tools.ietf.org/html/rfc6690
 
-SenML
+CoRE SenML
+https://tools.ietf.org/html/draft-ietf-core-senml-05
 
-Dynlink
+CoRE Dynlink
+https://tools.ietf.org/html/draft-ietf-core-dynlink-03
 
-Earlier work:
+Even Models for RESTful APIs
+http://iot-datamodels.blogspot.com/2013/05/event-models-for-restful-apis.html
 
-REST + Events blog post
-
-REST MWQTT Bridge slides
+REST to MQTT Bridge slides
+https://www.slideshare.net/michaeljohnkoster/mqtt-rest-bridge
