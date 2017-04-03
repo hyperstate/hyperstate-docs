@@ -1,8 +1,8 @@
-# Reactive Hypermedia: Design Patterns for Asynchronous and Reactive Machine-to-Machine Interaction using Hypermedia Controls
+# Interactive Hypermedia - Asynchronous Machine Interaction using Hypermedia Controls
 
 ## Introduction
 
-The last two articles discussed some design issues and patterns in hypermedia controls for machine interfaces, and presented an experimental open source software platform and demonstrator for an example hypermedia system.
+The last two articles discussed some issues and design patterns  for machine interaction using hypermedia controls, and presented an experimental open source software platform and demonstrator for an example machine-to-machine hypermedia system.
 
 This article will summarize the progress on this topic over the last year and focus on the subject of asynchronous and realtime interactions using REST design principles and, in particular, hypermedia controls.
 
@@ -12,7 +12,7 @@ Since the last article, there is a new Internet Draft describing a content forma
 
 https://datatracker.ietf.org/doc/draft-koster-t2trg-hsml/
 
-### Content Format
+### HSML Content Format
 
 HSML is an updated version of the content format described in the earlier articles, and is kept aligned with the current versions of SenML and CoRE Link-Format. 
 
@@ -20,7 +20,7 @@ HSML representations include CoRE Link-Format and SenML, with some extensions to
 
 HSML provides for use of the Interface Type parameter (if) in links and request parameters, and is used to select representations of a resource as defined in CoRE Interfaces.
 
-### Common Transfer Layer
+### HSML Common Transfer Layer
 
 The HSML draft discusses a common abstract transfer layer using CRUD + Observe/Notify, also known as CRUD+N, which is used to map various concrete protocols, including HTTP, CoAP, and MQTT. 
 
@@ -46,11 +46,11 @@ With hypermedia controls to dynamically describe state transitions, REST clients
 
 Hypermedia controls describe possible state transitions based on the current state of the system, rather than pre-determined by a static resource design.
 
-## Reactive Hypermedia: Actions and Link Bindings
+## Interactive and Reactive Hypermedia: Actions and Link Bindings
 
-In the last article, a class of hypermedia controls was described that facilitates asynchronous and realtime interaction between hypermedia clients and REST servers. These belong to a general class of Reactive Hypermedia controls, that can direct the transfer and processing of dynamically changing data and asynchronous events.
+In the last article, a class of hypermedia controls was described that facilitates asynchronous and realtime interaction between hypermedia clients and REST servers. These belong to a general class of interactive, and reactive, Hypermedia controls, that can direct the transfer and processing of dynamically changing data and asynchronous events.
 
-This article describes two types of this class of Reactive Hypermedia controls, Actions and Link Bindings, in more depth, with examples and terminology consistent with the HSML Internet Draft published in the IRTF Thing to Thing research group (T2TRG):
+This article describes two types of this class of Interactive Hypermedia controls, Actions and Link Bindings, in more depth, with examples and terminology consistent with the HSML Internet Draft published in the IRTF Thing to Thing research group (T2TRG):
 
 ### Problem statement and scope
 
@@ -62,7 +62,7 @@ In the server to client case, the problem includes describing how to use asynchr
 
 ### Actions and Forms
 
-Incoming state transitions are state transitions that a client wishes to make on a resource, such as turning a power switch on or opening a garage door.
+Incoming (from the client to the server) state transitions are state transitions that a client wishes to make on a resource, such as turning a power switch on or opening a garage door.
 
 For incoming state transitions, the problem is how to inform the client what transitions are available and how to construct requests which change the resource state of the system in some way that may be more or less indirectly related to the control input. It is not always a simple and immediate CRUD state update. The state of the resource may need to be asynchronously monitored to complete the client state transition at some time in the future.
 
@@ -81,7 +81,7 @@ In the case that Actions are performed on a proxy resource, the resource may be 
 
 ### Link Bindings
 
-For outgoing state transitions, there is the additional problem of describing how a client is expected to asynchronously obtain the state transitions as they occur, perhaps with some additional QoS parameters specified as system constraints.
+For outgoing (from the server to the client) state transitions, there is the additional problem of describing how a client is expected to asynchronously obtain the state transitions as they occur, perhaps with some additional QoS parameters specified as system constraints.
 
 The concept of a Link Binding is presented in the HSML draft. A link binding, in this context and in the context of the CoRE dynlink Internet Draft, is a hyperlnk that defines a dynamic data update from one resource to another.
 
@@ -105,7 +105,7 @@ An extension to link bindings may be created which enables a link binding to con
 
 ## System architecture examples
 
-Reactive hypermedia controls enable the dynamic orchestration of client-server interactions by discovering actions and adding dynamic link bindings to connect resources, event sources, and event handlers. The following are some examples of system-level orchestration using reactive hypermedia.
+Interactive hypermedia controls enable the dynamic orchestration of client-server interactions by discovering actions and adding dynamic link bindings to connect resources, event sources, and event handlers. The following are some examples of system-level orchestration using interactive hypermedia.
 
 ### Actions in hypermedia clients
 
@@ -169,10 +169,10 @@ GET /example/light/brightness/?if=core.ll
         "if": ["core.ll", "core.b"]
       },
       {
-         "href": "value",
-         "rt": "urn:example:value",
-         "content-format": 50,
-         "if": "core.rp"
+        "href": "value",
+        "rt": "urn:example:value",
+        "content-format": 50,
+        "if": "core.rp"
        },
        {
          "href": "ramptime",
@@ -181,12 +181,12 @@ GET /example/light/brightness/?if=core.ll
          "if": "core.rp"
        },
        {
-        "href": "moveto/",
-        "rel": ["alternate", "action"],
-        "rt": "urn:example:moveto",
-        "method": "create",
-        "accept": 50,
-        "if": ["core.b"]
+         "href": "moveto/",
+         "rel": ["alternate", "action"],
+         "rt": "urn:example:moveto",
+         "method": "create",
+         "accept": 50,
+         "if": ["core.b"]
        }
      ]
 
@@ -279,13 +279,13 @@ By default, the source would use Observe or a REST hook and the destination (tra
 
 ### Using pubsub communication with REST
 
-Link bindings can specify the source and target to be differnet protocols. For example, changes to the temperaure value could be published to an MQTT broker.
+Link bindings can specify the source and target to be differnet protocols. For example, changes to the temperature value could be published to an MQTT broker, on an arbitrary topic name.
 
     [
       {
         "anchor": "/example/temperature/value",
         "rel": "monitor",
-        "href": "mqtt://example.com:1883/example-topic",
+        "href": "mqtt://example.com:1883/temperature-topic",
         "pmin": 10,
         "pmax": 600,
         "st": 1
@@ -333,6 +333,9 @@ https://tools.ietf.org/html/draft-ietf-core-senml-05
 
 ### CoRE Dynlink
 https://tools.ietf.org/html/draft-ietf-core-dynlink-03
+
+### CoRE Interfaces
+https://tools.ietf.org/html/draft-ietf-core-interfaces-09
 
 ### Even Models for RESTful APIs
 http://iot-datamodels.blogspot.com/2013/05/event-models-for-restful-apis.html
