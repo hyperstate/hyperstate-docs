@@ -99,6 +99,131 @@ Reactive hypermedia controls enable the dynamic orchestration of client-server i
 
 ### Actions in hypermedia clients
 
+The Action control enables a generic client to adapt to the state machine of the server when performing actuation and invoking actions. The client consumes the hypermedia control, using the information obtained to select an action, marshal its parameters, and apply the action to the resource using the correct method and content format.
+
+Typically, the hypermedia control will be annotated with semantic identifiers to indicate the type(s) of action offered and the types of parameters expected, as well as any special response that may be returned.
+
+Resouce servers may offer action design patterns optimized for the particular situation, and clients may adapt to a variety of patterns without a-priori knowledge, using hypermedia action controls.
+
+Actions are indicated with a link relation "rel=action", as per the HSML draft.
+
+In the examples below, a hypermedia application only needs to know the semantic meanings of the terms. The hypermedia client can adapt to the different server designs based on consuming the hypermedia action control.
+
+Client wants the light to move to 77% brightness with a ramp time of 10 seconds
+
+action = moveto ({targetbrightness = 77, units = %}, {ramptime = 10, units = seconds})
+
+The client would perform a link query to discover a moveto action and verify that it know how to express the target parameters in the available units.
+
+In this example, the client is looking for a brightness control with a "moveto" action type
+
+GET /example/light?if=core.ll
+
+[
+  {
+    "href": "brightness",
+    "rt": "urn:example:brightness",
+    "content-format": 50,
+    "if": [core.ll]
+  },
+  {
+    "anchor": "brightness",
+    "href": "moveto",
+    "rel": ["alternate", "action"],
+    "rt": "urn:example:moveto",
+    "method": "create",
+    "accept": 50,
+    "if": ["core.b"]
+  }
+]
+
+The resource at /example/light/moveto is an alternate resource for the collection at /example/light/brightness and offers action capability. The resource type (rt) is "moveto" which for action resources indicates the type of action.
+
+Seeing the readable parameter interface on the brightness, the client could check the units and adapt if needed.
+
+GET /example/light/brightness?if=core.ll
+[
+  {
+    "href": "targetbrightness",
+    "rt": "urn:example:targetvalue",
+    "content-format": 50,
+    "if": [core.rp]
+  },
+  {
+    "href": "ramptime",
+    "rt": "urn:example:ramptime",
+    "content-format": 50,
+    "if": [core.rp]
+  }
+]
+
+GET /example/light/brightness/targetbrightness?if=core.rp
+[
+  {
+    "n": "targetbrightness", 
+    "u": "%", 
+    "min": 0, 
+    "max": 100, 
+    "res": 0.1
+  }
+]
+  
+GET /example/light/brightness/ramptime?if=core.rp
+[
+  {
+    "n": "targetbrightness", 
+    "u": "%", 
+    "min": 0, 
+    "max": 100, 
+    "res": 0.1
+  }
+]
+
+The client knows how to invoke the action at this point:
+
+POST /example/light/moveto?if=core.b
+
+[
+  {
+    "n": "targetbrightness", 
+    "v": 77
+  },
+  {
+    "n": "ramptime", 
+    "v": 10
+  }
+]
+
+Response:
+
+2.04 CREATED
+location: "77f3ac66"
+
+The client knows that the location can be monitored for status of the action instance that was created.
+
+GET /example/light/moveto/77f3ac66
+
+[
+  {
+    "n": "targetbrightness", 
+    "v": 77
+  },
+  {
+    "n": "ramptime", 
+    "v": 10
+  },
+  {
+    "n": "status", 
+    "vs": "pending"
+  },
+  {
+    "n": "remainingtime", 
+    "v": 10
+  }
+]
+
+
+
 ### Link bindings to monitor server state using REST callback 
 
 ### Using pubsub communication with REST
